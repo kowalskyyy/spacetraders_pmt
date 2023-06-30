@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Browser
+import Commands exposing (..)
 import Html exposing (Html, button, div, h1, h2, img, input, label, text)
 import Html.Attributes exposing (class, placeholder, src, style)
 import Html.Events exposing (onClick, onInput)
@@ -58,7 +59,7 @@ init _ =
       , gameData = data
       , currentView = "startView"
       }
-    , Commands.getFactions GetFactions
+    , Cmd.none
     )
 
 
@@ -70,9 +71,9 @@ type Msg
     = SetUsername String
     | Submit
     | ChangeView String
-    | Register String
     | Login String
     | GetFactions (Result Http.Error (List Faction))
+    | RegisterUser (Result Http.Error String)
 
 
 
@@ -86,13 +87,10 @@ update msg model =
             ( { model | username = username }, Cmd.none )
 
         Submit ->
-            ( model, Cmd.none )
+            ( model, Commands.registerUser model.username RegisterUser )
 
         ChangeView x ->
             ( { model | currentView = x }, Cmd.none )
-
-        Register name ->
-            ( model, Cmd.none )
 
         Login toke ->
             ( model, Cmd.none )
@@ -101,6 +99,12 @@ update msg model =
             ( model, Cmd.none )
 
         GetFactions (Err e) ->
+            ( model, Cmd.none )
+
+        RegisterUser (Ok x) ->
+            ( { model | accessToken = x }, Cmd.none )
+
+        RegisterUser (Err e) ->
             ( model, Cmd.none )
 
 
@@ -131,6 +135,9 @@ view model =
                     text ""
 
                 "help" ->
+                    text ""
+
+                _ ->
                     text ""
             ]
         ]
@@ -169,7 +176,7 @@ startView model =
     div [ class "right-section" ]
         [ h1 [ class "distance" ] [ text "Register User" ]
         , label [ class "distance" ] [ text "Username: " ]
-        , input [ placeholder "Enter your username", onInput Register, class "distance" ] []
+        , input [ placeholder "Enter your username", onInput SetUsername, class "distance" ] []
         , button [ onClick Submit, class "distance" ] [ text "Register" ]
         , h1 [ class "distance" ] [ text "Login" ]
         , label [ class "distance" ] [ text "Access token: " ]

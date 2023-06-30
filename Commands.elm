@@ -1,9 +1,10 @@
 module Commands exposing (..)
 
 import Http
-import HttpBuilder exposing (request, withExpect, withHeaders)
-import Json.Decode exposing (Decoder, bool, field, int, list, string, succeed)
+import HttpBuilder exposing (request, withExpect, withHeaders, withJsonBody)
+import Json.Decode exposing (Decoder, at, bool, field, int, list, string, succeed)
 import Json.Decode.Pipeline exposing (hardcoded, optional, required, requiredAt)
+import Json.Encode as Encode
 
 
 baseUrl : String
@@ -42,4 +43,20 @@ getFactions msg =
     HttpBuilder.get (baseUrl ++ "my/factions")
         |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
         |> withExpect (Http.expectJson msg factionListDecoder)
+        |> request
+
+
+registerUser : String -> (Result Http.Error String -> msg) -> Cmd msg
+registerUser username msg =
+    let
+        payload =
+            Encode.object
+                [ ( "symbol", Encode.string username )
+                , ( "faction", Encode.string "COSMIC" )
+                ]
+    in
+    HttpBuilder.post (baseUrl ++ "register")
+        |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
+        |> withExpect (Http.expectJson msg (at [ "data", "token" ] string))
+        |> withJsonBody payload
         |> request
