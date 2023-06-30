@@ -58,6 +58,8 @@ type Msg
     = SetUsername String
     | Submit
     | ChangeView String
+    | Register String
+    | Login String
 
 
 
@@ -75,6 +77,12 @@ update msg model =
 
         ChangeView x ->
             { model | currentView = x }
+
+        Register name ->
+            model
+
+        Login toke ->
+            model
 
 
 
@@ -118,8 +126,12 @@ startView model =
     div []
         [ h1 [] [ text "Register User" ]
         , label [] [ text "Username: " ]
-        , input [ placeholder "Enter your username", onInput SetUsername ] []
+        , input [ placeholder "Enter your username", onInput Register ] []
         , button [ onClick Submit ] [ text "Register" ]
+        , h1 [] [ text "Login" ]
+        , label [] [ text "Access token: " ]
+        , input [ placeholder "token", onInput Login ] []
+        , button [ onClick Submit ] [ text "Log in" ]
         ]
 
 
