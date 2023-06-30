@@ -15,6 +15,16 @@
 	padding-right: 2vh;
 }
 
+.account-details {
+	display: flex;
+	flex-direction: column;
+	overflow-wrap: anywhere;
+}
+
+.account-details section {
+	padding: 5px;
+}
+
 .form {
 	display: flex;
 	flex-direction: column;

@@ -3,7 +3,7 @@ module Main exposing (..)
 import Browser
 import Commands exposing (..)
 import Data exposing (..)
-import Html exposing (Html, button, div, h1, h2, img, input, label, text)
+import Html exposing (Html, button, div, h1, h2, img, input, label, section, text)
 import Html.Attributes exposing (class, placeholder, src, style)
 import Html.Events exposing (onClick, onInput)
 import Http
@@ -95,7 +95,7 @@ update msg model =
             ( model, Cmd.none )
 
         LoginUser (Ok x) ->
-            ( model, Cmd.none )
+            ( { model | currentView = "dashboard" }, Cmd.none )
 
         LoginUser (Err e) ->
             ( model, Cmd.none )
@@ -201,7 +201,7 @@ loansView model =
 
 shipsView : Model -> Html Msg
 shipsView model =
-    div [] []
+    div [ class "right-section" ] [ text "Ships: " ]
 
 
 accountView : Model -> Html Msg
@@ -211,4 +211,4 @@ accountView model =
 
 dashboardView : Model -> Html Msg
 dashboardView model =
-    div [] []
+    div [ class "right-section" ] [ div [ class "account-details" ] [ section [] [ text ("Username: " ++ model.username) ], section [] [ text ("Access token: " ++ model.accessToken) ], section [] [ text ("Credits: " ++ String.fromInt model.gameData.credits) ] ] ]

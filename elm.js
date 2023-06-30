@@ -11174,7 +11174,11 @@ var $author$project$Main$update = F2(
 			case 'LoginUser':
 				if (_v0.a.$ === 'Ok') {
 					var x = _v0.a.a;
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{currentView: 'dashboard'}),
+						$elm$core$Platform$Cmd$none);
 				} else {
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -11187,8 +11191,48 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $elm$html$Html$section = _VirtualDom_node('section');
 var $author$project$Main$dashboardView = function (model) {
-	return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('right-section')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('account-details')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$section,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Username: ' + model.username)
+							])),
+						A2(
+						$elm$html$Html$section,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Access token: ' + model.accessToken)
+							])),
+						A2(
+						$elm$html$Html$section,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								'Credits: ' + $elm$core$String$fromInt(model.gameData.credits))
+							]))
+					]))
+			]));
 };
 var $author$project$Main$ChangeView = function (a) {
 	return {$: 'ChangeView', a: a};
