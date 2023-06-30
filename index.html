@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SpaceTraders API</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Register User</h1>
+    <label for="username">Username:</label>
+    <input type="text" id="username" placeholder="Enter your username" />
+    <button id="registerBtn">Register</button>
+
+    <script>
+      $(document).ready(function () {
+        // Function to handle the button click event
+        $("#registerBtn").click(function () {
+          var username = $("#username").val(); // Get the value from the input field
+          var requestData = {
+            symbol: username,
+            faction: "COSMIC",
+          };
+
+          $.ajax({
+            url: "https://api.spacetraders.io/v2/register",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(requestData),
+            success: function (response) {
+              console.log(response);
+              alert("Registration successful!");
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+              alert("Registration failed. Please try again.");
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
