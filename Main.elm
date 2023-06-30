@@ -12,7 +12,6 @@ import Html.Events exposing (onClick, onInput)
 
 type alias Model =
     { username : String
-    , response : String
     , accessToken : String
     , gameData : GameData
     }
@@ -44,7 +43,6 @@ init =
             }
     in
     { username = ""
-    , response = ""
     , accessToken = ""
     , gameData = data
     }
@@ -85,8 +83,19 @@ view model =
         , input [ placeholder "Enter your username", onInput SetUsername ] []
         , button [ onClick Submit ] [ text "Register" ]
         , h2 [] [ text "Response:" ]
-        , div [] [ text model.response ]
+        , div [] [ text model.username ]
+        , div [] [ text model.accessToken ]
+        , if model.accessToken /= "" then
+            displayGameData model
+
+          else
+            text ""
         ]
+
+
+displayGameData : Model -> Html Msg
+displayGameData model =
+    div [] []
 
 
 

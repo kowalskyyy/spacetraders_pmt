@@ -4956,7 +4956,7 @@ function _Browser_load(url)
 var $author$project$Main$init = function () {
 	var loanDefault = {loanName: '', loanValue: 100};
 	var data = {credits: 0, loans: loanDefault};
-	return {accessToken: '', gameData: data, response: '', username: ''};
+	return {accessToken: '', gameData: data, username: ''};
 }();
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
@@ -10593,6 +10593,9 @@ var $author$project$Main$SetUsername = function (a) {
 	return {$: 'SetUsername', a: a};
 };
 var $author$project$Main$Submit = {$: 'Submit'};
+var $author$project$Main$displayGameData = function (model) {
+	return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$label = _VirtualDom_node('label');
@@ -10647,8 +10650,16 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text(model.response)
-					]))
+						$elm$html$Html$text(model.username)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(model.accessToken)
+					])),
+				(model.accessToken !== '') ? $author$project$Main$displayGameData(model) : $elm$html$Html$text('')
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
