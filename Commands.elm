@@ -63,3 +63,11 @@ getContracts token msg =
         |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
         |> withExpect (Http.expectJson msg (field "data" (list contractDecoder)))
         |> request
+
+
+acceptContract : String -> String -> Res ContractResult msg -> Cmd msg
+acceptContract token contractId msg =
+    HttpBuilder.post (baseUrl ++ "my/contracts/" ++ contractId ++ "/accept")
+        |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
+        |> withExpect (Http.expectJson msg (field "data" contractResultDecoder))
+        |> request

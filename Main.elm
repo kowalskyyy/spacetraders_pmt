@@ -40,6 +40,7 @@ init _ =
       , inputToken = ""
       , gameData = data
       , currentView = "startView"
+      , acceptedContracts = []
       }
     , Cmd.none
     )
@@ -60,6 +61,7 @@ type Msg
     | RegisterUser (Result Http.Error UserRegistration)
     | LoginUser (Result Http.Error String)
     | Contracts (Result Http.Error (List Contract))
+    | AcceptContract (Result Http.Error ContractResult)
 
 
 
@@ -132,6 +134,12 @@ update msg model =
             ( { model | gameData = ngd }, Cmd.none )
 
         Contracts (Err e) ->
+            ( model, Cmd.none )
+
+        AcceptContract (Ok x) ->
+            ( { model | acceptedContracts = x :: model.acceptedContracts }, Cmd.none )
+
+        AcceptContract (Err e) ->
             ( model, Cmd.none )
 
 

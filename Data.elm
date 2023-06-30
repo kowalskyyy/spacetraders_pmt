@@ -11,6 +11,7 @@ type alias Model =
     , gameData : GameData
     , inputToken : String
     , currentView : String
+    , acceptedContracts : List ContractResult
     }
 
 
@@ -103,6 +104,19 @@ contractInit =
     , deadlineToAccept = ""
     , id = ""
     }
+
+
+type alias ContractResult =
+    { contract : Contract
+    , agent : Agent
+    }
+
+
+contractResultDecoder : Decoder ContractResult
+contractResultDecoder =
+    succeed ContractResult
+        |> required "contract" contractDecoder
+        |> required "agent" agentDecoder
 
 
 agentInit : Agent
