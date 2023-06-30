@@ -13,10 +13,6 @@ baseUrl =
     "https://api.spacetraders.io/v2/"
 
 
-token =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiVEVBTS1SRUQiLCJ2ZXJzaW9uIjoidjIiLCJyZXNldF9kYXRlIjoiMjAyMy0wNi0yNCIsImlhdCI6MTY4ODExMTU4MCwic3ViIjoiYWdlbnQtdG9rZW4ifQ.bpnSE-hd8jNY9k4pZ0XnmubAOLpYX-y00yjIwoqvKiYA90E2pk-ctBW4BXCyTBko6dB7lpq62N-VacDcIGXEEefy2Uea-yJT6FubOX_SL2DrVDSRu5vZm3GifGrWDoHanuKd-SAQkA5AruaYd0iny5amW4E9RsMlfldB_J2KaO3IQ_cbxxbGUsJeIZr66SaXvds2F68eoUUfk5vJXBcdbXRmzggC0IyjyeZJLwnxvREhO5lnoKKbVr4qswfswkMwMcsYzzl56pf20QdHzxQXtumRj0CUfO6qyrxB3Bz8VJ5Caw6j9wtHJUl0huC1EbwlrpHsv1oUd9QsR9_YyuG5Bg"
-
-
 
 --{"data":[{"symbol":"COSMIC","reputation":100}],"meta":{"total":1,"page":1,"limit":10}}
 
@@ -33,8 +29,8 @@ factionListDecoder =
     field "data" (list factionDecoder)
 
 
-getFactions : (Result Http.Error (List Faction) -> msg) -> Cmd msg
-getFactions msg =
+getFactions : String -> (Result Http.Error (List Faction) -> msg) -> Cmd msg
+getFactions token msg =
     HttpBuilder.get (baseUrl ++ "my/factions")
         |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
         |> withExpect (Http.expectJson msg factionListDecoder)
@@ -53,4 +49,12 @@ registerUser username msg =
     HttpBuilder.post (baseUrl ++ "register")
         |> withExpect (Http.expectJson msg (at [ "data", "token" ] string))
         |> withJsonBody payload
+        |> request
+
+
+loginUser : String -> (Result Http.Error String -> msg) -> Cmd msg
+loginUser token msg =
+    HttpBuilder.get (baseUrl ++ "my/agent")
+        |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
+        |> withExpect (Http.expectJson msg (at [ "data", "user" ] string))
         |> request

@@ -10730,12 +10730,18 @@ var $elm$core$Basics$never = function (_v0) {
 	}
 };
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Data$agentInit = {accountId: '', credits: 0, headquarters: '', startingFaction: '', symbol: ''};
+var $author$project$Data$contractInit = {accepted: false, deadlineToAccept: $elm$core$Maybe$Nothing, expiration: $elm$core$Maybe$Nothing, factionSymbol: '', fulfilled: false, id: ''};
+var $author$project$Data$factionInit = {reputation: 0, symbol: ''};
 var $author$project$Main$init = function (_v0) {
 	var loanDefault = {loanName: '', loanValue: 100};
-	var data = {credits: 0, loans: loanDefault};
+	var data = {agent: $author$project$Data$agentInit, contract: $author$project$Data$contractInit, credits: 0, faction: $author$project$Data$factionInit};
 	return _Utils_Tuple2(
-		{accessToken: '', currentView: 'startView', gameData: data, username: ''},
+		{accessToken: '', currentView: 'startView', gameData: data, inputToken: '', username: ''},
 		$elm$core$Platform$Cmd$none);
+};
+var $author$project$Main$LoginUser = function (a) {
+	return {$: 'LoginUser', a: a};
 };
 var $author$project$Main$RegisterUser = function (a) {
 	return {$: 'RegisterUser', a: a};
@@ -10858,7 +10864,7 @@ var $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl = F2(
 			withCredentials: false
 		};
 	});
-var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
+var $lukewestby$elm_http_builder$HttpBuilder$get = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('GET');
 var $elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
 };
@@ -11023,6 +11029,51 @@ var $lukewestby$elm_http_builder$HttpBuilder$withExpect = F2(
 	function (expect, builder) {
 		return {body: builder.body, expect: expect, headers: builder.headers, method: builder.method, timeout: builder.timeout, tracker: builder.tracker, url: builder.url, withCredentials: builder.withCredentials};
 	});
+var $elm$http$Http$Header = F2(
+	function (a, b) {
+		return {$: 'Header', a: a, b: b};
+	});
+var $elm$http$Http$header = $elm$http$Http$Header;
+var $lukewestby$elm_http_builder$HttpBuilder$withHeaders = F2(
+	function (headerPairs, builder) {
+		return _Utils_update(
+			builder,
+			{
+				headers: _Utils_ap(
+					A2(
+						$elm$core$List$map,
+						function (_v0) {
+							var key = _v0.a;
+							var value = _v0.b;
+							return A2($elm$http$Http$header, key, value);
+						},
+						headerPairs),
+					builder.headers)
+			});
+	});
+var $author$project$Commands$loginUser = F2(
+	function (token, msg) {
+		return $lukewestby$elm_http_builder$HttpBuilder$request(
+			A2(
+				$lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				A2(
+					$elm$http$Http$expectJson,
+					msg,
+					A2(
+						$elm$json$Json$Decode$at,
+						_List_fromArray(
+							['data', 'user']),
+						$elm$json$Json$Decode$string)),
+				A2(
+					$lukewestby$elm_http_builder$HttpBuilder$withHeaders,
+					_List_fromArray(
+						[
+							_Utils_Tuple2('Content-Type', 'application/json'),
+							_Utils_Tuple2('Authorization', 'Bearer ' + token)
+						]),
+					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my/agent'))));
+	});
+var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
 var $elm$http$Http$jsonBody = function (value) {
 	return A2(
 		_Http_pair,
@@ -11090,8 +11141,16 @@ var $author$project$Main$update = F2(
 						{currentView: x}),
 					$elm$core$Platform$Cmd$none);
 			case 'Login':
-				var toke = _v0.a;
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				return _Utils_Tuple2(
+					model,
+					A2($author$project$Commands$loginUser, model.inputToken, $author$project$Main$LoginUser));
+			case 'LoginInput':
+				var x = _v0.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{inputToken: x}),
+					$elm$core$Platform$Cmd$none);
 			case 'GetFactions':
 				if (_v0.a.$ === 'Ok') {
 					var x = _v0.a.a;
@@ -11100,14 +11159,22 @@ var $author$project$Main$update = F2(
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 'RegisterUser':
 				if (_v0.a.$ === 'Ok') {
 					var x = _v0.a.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{accessToken: x}),
+							{accessToken: x, currentView: 'dashboard'}),
 						$elm$core$Platform$Cmd$none);
+				} else {
+					var e = _v0.a.a;
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			default:
+				if (_v0.a.$ === 'Ok') {
+					var x = _v0.a.a;
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -11201,8 +11268,9 @@ var $author$project$Main$navigation = function (model) {
 					]))
 			]));
 };
-var $author$project$Main$Login = function (a) {
-	return {$: 'Login', a: a};
+var $author$project$Main$Login = {$: 'Login'};
+var $author$project$Main$LoginInput = function (a) {
+	return {$: 'LoginInput', a: a};
 };
 var $author$project$Main$SetUsername = function (a) {
 	return {$: 'SetUsername', a: a};
@@ -11285,7 +11353,7 @@ var $author$project$Main$startView = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$placeholder('token'),
-						$elm$html$Html$Events$onInput($author$project$Main$Login),
+						$elm$html$Html$Events$onInput($author$project$Main$LoginInput),
 						$elm$html$Html$Attributes$class('distance')
 					]),
 				_List_Nil),
@@ -11293,7 +11361,7 @@ var $author$project$Main$startView = function (model) {
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick($author$project$Main$Submit),
+						$elm$html$Html$Events$onClick($author$project$Main$Login),
 						$elm$html$Html$Attributes$class('distance')
 					]),
 				_List_fromArray(
@@ -11399,4 +11467,4 @@ var $author$project$Main$main = $elm$browser$Browser$element(
 		view: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Commands.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"Login":["String.String"],"GetFactions":["Result.Result Http.Error (List.List Commands.Faction)"],"RegisterUser":["Result.Result Http.Error String.String"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error String.String"],"LoginUser":["Result.Result Http.Error String.String"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));

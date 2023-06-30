@@ -1,19 +1,20 @@
 module Data exposing (..)
 
 import Date exposing (..)
+import Json.Decode as Decode exposing (..)
 
 
 type alias Model =
     { username : String
     , accessToken : String
     , gameData : GameData
+    , inputToken : String
     , currentView : String
     }
 
 
 type alias GameData =
     { credits : Int
-    , loans : Loan
     , agent : Agent
     , faction : Faction
     , contract : Contract

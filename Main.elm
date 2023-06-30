@@ -24,7 +24,6 @@ init _ =
     let
         data =
             { credits = 0
-            , loans = loanDefault
             , agent = agentInit
             , faction = factionInit
             , contract = contractInit
@@ -37,6 +36,7 @@ init _ =
     in
     ( { username = ""
       , accessToken = ""
+      , inputToken = ""
       , gameData = data
       , currentView = "startView"
       }
@@ -52,9 +52,11 @@ type Msg
     = SetUsername String
     | Submit
     | ChangeView String
-    | Login String
+    | LoginInput String
+    | Login
     | GetFactions (Result Http.Error (List Faction))
     | RegisterUser (Result Http.Error String)
+    | LoginUser (Result Http.Error String)
 
 
 
@@ -73,8 +75,11 @@ update msg model =
         ChangeView x ->
             ( { model | currentView = x }, Cmd.none )
 
-        Login toke ->
-            ( model, Cmd.none )
+        Login ->
+            ( model, Commands.loginUser model.inputToken LoginUser )
+
+        LoginInput x ->
+            ( { model | inputToken = x }, Cmd.none )
 
         GetFactions (Ok x) ->
             ( model, Cmd.none )
@@ -83,9 +88,15 @@ update msg model =
             ( model, Cmd.none )
 
         RegisterUser (Ok x) ->
-            ( { model | accessToken = x, currentView = "dashboard" }, Commands.getFactions GetFactions )
+            ( { model | accessToken = x, currentView = "dashboard" }, Cmd.none )
 
         RegisterUser (Err e) ->
+            ( model, Cmd.none )
+
+        LoginUser (Ok x) ->
+            ( model, Cmd.none )
+
+        LoginUser (Err e) ->
             ( model, Cmd.none )
 
 
@@ -149,7 +160,7 @@ navigation model =
 
 displayGameData : Model -> Html Msg
 displayGameData model =
-    div [] [ div [] [ text "Credits: ", text (String.fromInt model.gameData.credits) ], div [] [ text "Loans: ", text model.gameData.loans.loanName, text "value :", text (String.fromInt model.gameData.loans.loanValue) ] ]
+    div [] []
 
 
 startView : Model -> Html Msg
@@ -161,8 +172,8 @@ startView model =
         , button [ onClick Submit, class "distance" ] [ text "Register" ]
         , h1 [ class "distance" ] [ text "Login" ]
         , label [ class "distance" ] [ text "Access token: " ]
-        , input [ placeholder "token", onInput Login, class "distance" ] []
-        , button [ onClick Submit, class "distance" ] [ text "Log in" ]
+        , input [ placeholder "token", onInput LoginInput, class "distance" ] []
+        , button [ onClick Login, class "distance" ] [ text "Log in" ]
         ]
 
 
