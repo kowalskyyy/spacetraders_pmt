@@ -8,6 +8,10 @@ import Json.Decode.Pipeline exposing (hardcoded, optional, required, requiredAt)
 import Json.Encode as Encode
 
 
+type alias Res a msg =
+    Result Http.Error a -> msg
+
+
 baseUrl : String
 baseUrl =
     "https://api.spacetraders.io/v2/"
@@ -15,13 +19,6 @@ baseUrl =
 
 
 --{"data":[{"symbol":"COSMIC","reputation":100}],"meta":{"total":1,"page":1,"limit":10}}
-
-
-factionDecoder : Decoder Faction
-factionDecoder =
-    succeed Faction
-        |> required "symbol" string
-        |> required "reputation" int
 
 
 factionListDecoder : Decoder (List Faction)
@@ -37,7 +34,7 @@ getFactions token msg =
         |> request
 
 
-registerUser : String -> (Result Http.Error String -> msg) -> Cmd msg
+registerUser : String -> (Result Http.Error UserRegistration -> msg) -> Cmd msg
 registerUser username msg =
     let
         payload =
@@ -47,7 +44,7 @@ registerUser username msg =
                 ]
     in
     HttpBuilder.post (baseUrl ++ "register")
-        |> withExpect (Http.expectJson msg (at [ "data", "token" ] string))
+        |> withExpect (Http.expectJson msg userRegistrationDecoder)
         |> withJsonBody payload
         |> request
 

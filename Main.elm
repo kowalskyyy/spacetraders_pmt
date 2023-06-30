@@ -56,7 +56,7 @@ type Msg
     | Logout
     | Login
     | GetFactions (Result Http.Error (List Faction))
-    | RegisterUser (Result Http.Error String)
+    | RegisterUser (Result Http.Error UserRegistration)
     | LoginUser (Result Http.Error String)
 
 
@@ -89,7 +89,7 @@ update msg model =
             ( model, Cmd.none )
 
         RegisterUser (Ok x) ->
-            ( { model | accessToken = x, currentView = "dashboard" }, Cmd.none )
+            ( { model | accessToken = x.token, currentView = "dashboard" }, Cmd.none )
 
         RegisterUser (Err e) ->
             ( model, Cmd.none )
