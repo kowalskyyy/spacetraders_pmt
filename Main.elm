@@ -91,7 +91,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "page" ]
         [ navigation
         , case model.currentView of
             "startView" ->
@@ -104,7 +104,7 @@ view model =
 
 navigation : Html Msg
 navigation =
-    div []
+    div [ class "navbar" ]
         [ div [ class "myButtonClass" ] [ text "Dashboard" ]
         , div [] [ text "Ships" ]
         , div [] [ text "Loans" ]
@@ -129,7 +129,7 @@ main =
 
 startView : Model -> Html Msg
 startView model =
-    div []
+    div [ class "centerView" ]
         [ h1 [] [ text "Register User" ]
         , label [] [ text "Username: " ]
         , input [ placeholder "Enter your username", onInput Register ] []

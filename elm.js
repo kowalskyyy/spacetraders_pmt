@@ -10603,7 +10603,10 @@ var $author$project$Main$update = F2(
 	});
 var $author$project$Main$navigation = A2(
 	$elm$html$Html$div,
-	_List_Nil,
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('navbar')
+		]),
 	_List_fromArray(
 		[
 			A2(
@@ -10658,7 +10661,10 @@ var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProp
 var $author$project$Main$startView = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('centerView')
+			]),
 		_List_fromArray(
 			[
 				A2(
@@ -10730,7 +10736,10 @@ var $author$project$Main$startView = function (model) {
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('page')
+			]),
 		_List_fromArray(
 			[
 				$author$project$Main$navigation,

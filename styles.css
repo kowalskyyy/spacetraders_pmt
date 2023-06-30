@@ -4,3 +4,21 @@
 	padding: 10px 20px;
 	font-size: 16px;
   }
+
+.page {
+	display: flex;
+}
+
+.navbar {
+	border-right: 2px solid red;
+}
+
+.navbar div {
+	padding: 5px;
+}
+
+.centerView {
+	justify-content: center;
+	align-items: center;
+}
+
