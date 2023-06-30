@@ -4,6 +4,7 @@
 }
 
 .navbar {
+	padding-right: 2vh;
 	border-right: 2px solid red;
 }
 
@@ -13,6 +14,10 @@
 	padding: 10px 20px;
 	font-size: 16px;
 	width: 20vh;
+}
+
+.topbar {
+
 }
 
 .navbar div {

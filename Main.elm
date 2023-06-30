@@ -91,15 +91,23 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "split-view" ]
-        [ navigation
-        , case model.currentView of
-            "startView" ->
-                startView model
+    div []
+        [ topBar
+        , div [ class "split-view" ]
+            [ navigation
+            , case model.currentView of
+                "startView" ->
+                    startView model
 
-            _ ->
-                text ""
+                _ ->
+                    text ""
+            ]
         ]
+
+
+topBar : Html Msg
+topBar =
+    div [] [ text "this is top shit", button [] [ text "account" ] ]
 
 
 navigation : Html Msg
