@@ -55,3 +55,11 @@ loginUser token msg =
         |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
         |> withExpect (Http.expectJson msg (at [ "data", "user" ] string))
         |> request
+
+
+getContracts : String -> Res (List Contract) msg -> Cmd msg
+getContracts token msg =
+    HttpBuilder.get (baseUrl ++ "my/contracts")
+        |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
+        |> withExpect (Http.expectJson msg (field "data" (list contractDecoder)))
+        |> request

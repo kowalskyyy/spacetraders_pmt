@@ -26,7 +26,7 @@ init _ =
             { credits = 0
             , agent = agentInit
             , faction = factionInit
-            , contract = contractInit
+            , contracts = []
             , ship = initShip
             }
 
@@ -59,6 +59,7 @@ type Msg
     | GetFactions (Result Http.Error (List Faction))
     | RegisterUser (Result Http.Error UserRegistration)
     | LoginUser (Result Http.Error String)
+    | Contracts (Result Http.Error (List Contract))
 
 
 
@@ -95,7 +96,7 @@ update msg model =
                 gd =
                     { credits = x.agent.credits
                     , agent = x.agent
-                    , contract = x.contract
+                    , contracts = [ x.contract ]
                     , faction = x.faction
                     , ship = x.ship
                     }
@@ -119,6 +120,19 @@ update msg model =
 
         Logout ->
             ( { model | accessToken = "", currentView = "startView" }, Cmd.none )
+
+        Contracts (Ok x) ->
+            let
+                gd =
+                    model.gameData
+
+                ngd =
+                    { gd | contracts = x }
+            in
+            ( { model | gameData = ngd }, Cmd.none )
+
+        Contracts (Err e) ->
+            ( model, Cmd.none )
 
 
 

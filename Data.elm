@@ -18,7 +18,7 @@ type alias GameData =
     { credits : Int
     , agent : Agent
     , faction : Faction
-    , contract : Contract
+    , contracts : List Contract
     , ship : Ship
     }
 
