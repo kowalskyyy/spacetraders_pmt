@@ -1,0 +1,111 @@
+## buildfiles
+places.css
+customerSuccess.css
+*.map
+.pm2rc
+pm2_dev.json
+archive
+package-lock.json
+configRev.js
+
+/static
+sites/api.v3/listings/location/static/
+sites/api.v3/static/
+
+# ELM
+elm-stuff/
+**/elm/dist/
+**/elm/**/dist/
+
+# VS CODE / ELM
+**/elm/src/**/elm-package.json
+
+##node.js
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+!/modules/baidu/categories/baiduCategories.csv
+!/modules/bing/categories/bing_service_area_categories.csv
+
+pids
+logs
+results
+
+node_modules
+npm-debug.log
+
+## OSX
+.DS_Store
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+##textmate
+*.tmproj
+*.tmproject
+tmtags
+
+## sublimetext
+# SublimeText project files
+/*.sublime-project
+
+## vscode
+.vscode
+file.http
+
+##VI
+*.swp
+*.vim
+
+## WebStorm
+.idea/*
+
+## jshint
+shared/**/.jshintrc
+sites/**/app/.jshintrc
+sites/**/client/.jshintrc
+sites/_shared/**/.jshintrc
+.jshintResult/
+
+##merge
+*.orig
+
+/data/db
+
+**/exportFiles/**/tmp/**
+/tmpFiles/**
+/lighthouse/tmp
+
+## vs code
+/typings
+jsconfig.json
+
+config.dev.json
+
+# langugage files
+elm/places/src/Translations
+elm/gen/
+
+.coverage/
+coverage/
+
+.queues
+
+docker-compose.override.yml
+
+## local script
+slask.js
+
+#certs
+cert/ca.*
+cert/local-dev.*
+/v3.ext
