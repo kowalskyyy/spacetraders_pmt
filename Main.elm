@@ -7,6 +7,7 @@ import Html exposing (Html, button, div, h1, h2, img, input, label, section, tex
 import Html.Attributes exposing (class, placeholder, src, style)
 import Html.Events exposing (onClick, onInput)
 import Http
+import List exposing (length)
 
 
 
@@ -41,6 +42,7 @@ init _ =
       , gameData = data
       , currentView = "startView"
       , acceptedContracts = []
+      , selectedIndex = 0
       }
     , Cmd.none
     )
@@ -55,6 +57,8 @@ type Msg
     | Submit
     | ChangeView String
     | LoginInput String
+    | NextContract
+    | PrevContract
     | Logout
     | Login
     | GetFactions (Result Http.Error (List Faction))
@@ -142,6 +146,20 @@ update msg model =
         AcceptContract (Err e) ->
             ( model, Cmd.none )
 
+        NextContract ->
+            let
+                nextIndex =
+                    model.selectedIndex + 1
+            in
+            ( { model | selectedIndex = nextIndex }, Cmd.none )
+
+        PrevContract ->
+            let
+                prevIndex =
+                    model.selectedIndex - 1
+            in
+            ( { model | selectedIndex = prevIndex }, Cmd.none )
+
 
 
 -- View
@@ -163,8 +181,8 @@ view model =
                 "ships" ->
                     text ""
 
-                "loans" ->
-                    text ""
+                "contracts" ->
+                    contractsView model
 
                 "missions" ->
                     text ""
@@ -196,7 +214,7 @@ navigation model =
         div [ class "navbar left-section" ]
             [ button [ onClick (ChangeView "dashboard") ] [ text "Dashboard" ]
             , button [ onClick (ChangeView "ships") ] [ text "Ships" ]
-            , button [ onClick (ChangeView "loans") ] [ text "Loans" ]
+            , button [ onClick (ChangeView "contracts") ] [ text "Contracts" ]
             , button [ onClick (ChangeView "missions") ] [ text "Missions" ]
             , button [ onClick (ChangeView "help") ] [ text "Help" ]
             ]
@@ -236,6 +254,52 @@ startView model =
 loansView : Model -> Html Msg
 loansView model =
     div [] []
+
+
+stringFromBool : Bool -> String
+stringFromBool value =
+    if value then
+        "True"
+
+    else
+        "False"
+
+
+contractsView : Model -> Html Msg
+contractsView model =
+    div []
+        [ div [ class "contract-info" ]
+            [ -- Display the contract information here
+              text <| "Accepted: " ++ stringFromBool (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).accepted
+            , text <| "Faction Symbol: " ++ (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).factionSymbol
+            , text <| "Type: " ++ (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).type_
+
+            -- Display other contract fields as needed
+            ]
+        , div []
+            [ button [ onClick PrevContract ] [ text "<" ]
+            , button [ onClick NextContract ] [ text ">" ]
+            ]
+        ]
+
+
+getIndex : Int -> List a -> Maybe a
+getIndex index list =
+    if index >= 0 && index < List.length list then
+        List.indexedMap
+            (\i x ->
+                if i == index then
+                    Just x
+
+                else
+                    Nothing
+            )
+            list
+            |> List.filterMap identity
+            |> List.head
+
+    else
+        Nothing
 
 
 shipsView : Model -> Html Msg

@@ -10731,17 +10731,14 @@ var $elm$core$Basics$never = function (_v0) {
 };
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Data$agentInit = {accountId: '', credits: 0, headquarters: '', startingFaction: '', symbol: ''};
-var $author$project$Data$paymentInit = {onAccepted: 0, onFulfilled: 0};
-var $author$project$Data$termsInit = {deadline: '', deliver: _List_Nil, payment: $author$project$Data$paymentInit};
-var $author$project$Data$contractInit = {accepted: false, deadlineToAccept: '', expiration: '', factionSymbol: '', fulfilled: false, id: '', terms: $author$project$Data$termsInit, type_: 'unknown'};
 var $author$project$Data$factionInit = {reputation: 0, symbol: ''};
 var $author$project$Data$initCargo = {capacity: 0, inventory: _List_Nil, units: 0};
 var $author$project$Data$initShip = {cargo: $author$project$Data$initCargo};
 var $author$project$Main$init = function (_v0) {
 	var loanDefault = {loanName: '', loanValue: 100};
-	var data = {agent: $author$project$Data$agentInit, contract: $author$project$Data$contractInit, credits: 0, faction: $author$project$Data$factionInit, ship: $author$project$Data$initShip};
+	var data = {agent: $author$project$Data$agentInit, contracts: _List_Nil, credits: 0, faction: $author$project$Data$factionInit, ship: $author$project$Data$initShip};
 	return _Utils_Tuple2(
-		{accessToken: '', currentView: 'startView', gameData: data, inputToken: '', username: ''},
+		{accessToken: '', currentView: 'startView', gameData: data, inputToken: '', selectedIndex: 0, username: ''},
 		$elm$core$Platform$Cmd$none);
 };
 var $author$project$Main$LoginUser = function (a) {
@@ -11075,7 +11072,7 @@ var $author$project$Commands$loginUser = F2(
 							_Utils_Tuple2('Content-Type', 'application/json'),
 							_Utils_Tuple2('Authorization', 'Bearer ' + token)
 						]),
-					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my'))));
+					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my/agent'))));
 	});
 var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
 var $author$project$Data$UserRegistration = F5(
@@ -11400,7 +11397,14 @@ var $author$project$Main$update = F2(
 			case 'RegisterUser':
 				if (_v0.a.$ === 'Ok') {
 					var x = _v0.a.a;
-					var gd = {agent: x.agent, contract: x.contract, credits: x.agent.credits, faction: x.faction, ship: x.ship};
+					var gd = {
+						agent: x.agent,
+						contracts: _List_fromArray(
+							[x.contract]),
+						credits: x.agent.credits,
+						faction: x.faction,
+						ship: x.ship
+					};
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -11422,14 +11426,172 @@ var $author$project$Main$update = F2(
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 'Logout':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{accessToken: '', currentView: 'startView'}),
 					$elm$core$Platform$Cmd$none);
+			case 'Contracts':
+				if (_v0.a.$ === 'Ok') {
+					var x = _v0.a.a;
+					var gd = model.gameData;
+					var ngd = _Utils_update(
+						gd,
+						{contracts: x});
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{gameData: ngd}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					var e = _v0.a.a;
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 'NextContract':
+				var nextIndex = model.selectedIndex + 1;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{selectedIndex: nextIndex}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var prevIndex = model.selectedIndex - 1;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{selectedIndex: prevIndex}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $author$project$Main$NextContract = {$: 'NextContract'};
+var $author$project$Main$PrevContract = {$: 'PrevContract'};
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Main$getIndex = F2(
+	function (index, list) {
+		return ((index >= 0) && (_Utils_cmp(
+			index,
+			$elm$core$List$length(list)) < 0)) ? $elm$core$List$head(
+			A2(
+				$elm$core$List$filterMap,
+				$elm$core$Basics$identity,
+				A2(
+					$elm$core$List$indexedMap,
+					F2(
+						function (i, x) {
+							return _Utils_eq(i, index) ? $elm$core$Maybe$Just(x) : $elm$core$Maybe$Nothing;
+						}),
+					list))) : $elm$core$Maybe$Nothing;
+	});
+var $author$project$Main$stringFromBool = function (value) {
+	return value ? 'True' : 'False';
+};
+var $author$project$Main$contractsView = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('contract-info')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Accepted: ' + $author$project$Main$stringFromBool(
+							A2(
+								$elm$core$Maybe$withDefault,
+								{
+									accepted: false,
+									deadlineToAccept: '',
+									expiration: '',
+									factionSymbol: '',
+									fulfilled: false,
+									id: '',
+									terms: {
+										deadline: '',
+										deliver: _List_Nil,
+										payment: {onAccepted: 0, onFulfilled: 0}
+									},
+									type_: ''
+								},
+								A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).accepted)),
+						$elm$html$Html$text(
+						'Faction Symbol: ' + A2(
+							$elm$core$Maybe$withDefault,
+							{
+								accepted: false,
+								deadlineToAccept: '',
+								expiration: '',
+								factionSymbol: '',
+								fulfilled: false,
+								id: '',
+								terms: {
+									deadline: '',
+									deliver: _List_Nil,
+									payment: {onAccepted: 0, onFulfilled: 0}
+								},
+								type_: ''
+							},
+							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).factionSymbol),
+						$elm$html$Html$text(
+						'Type: ' + A2(
+							$elm$core$Maybe$withDefault,
+							{
+								accepted: false,
+								deadlineToAccept: '',
+								expiration: '',
+								factionSymbol: '',
+								fulfilled: false,
+								id: '',
+								terms: {
+									deadline: '',
+									deliver: _List_Nil,
+									payment: {onAccepted: 0, onFulfilled: 0}
+								},
+								type_: ''
+							},
+							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).type_)
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick($author$project$Main$PrevContract)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('<')
+							])),
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick($author$project$Main$NextContract)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('>')
+							]))
+					]))
+			]));
+};
 var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$html$Html$section = _VirtualDom_node('section');
 var $elm$html$Html$Attributes$src = function (url) {
@@ -11536,11 +11698,11 @@ var $author$project$Main$navigation = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Events$onClick(
-						$author$project$Main$ChangeView('loans'))
+						$author$project$Main$ChangeView('contracts'))
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Loans')
+						$elm$html$Html$text('Contracts')
 					])),
 				A2(
 				$elm$html$Html$button,
@@ -11793,8 +11955,8 @@ var $author$project$Main$view = function (model) {
 								return $author$project$Main$dashboardView(model);
 							case 'ships':
 								return $elm$html$Html$text('');
-							case 'loans':
-								return $elm$html$Html$text('');
+							case 'contracts':
+								return $author$project$Main$contractsView(model);
 							case 'missions':
 								return $elm$html$Html$text('');
 							case 'help':
@@ -11816,4 +11978,4 @@ var $author$project$Main$main = $elm$browser$Browser$element(
 		view: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Agent":{"args":[],"type":"{ accountId : String.String, credits : Basics.Int, headquarters : String.String, startingFaction : String.String, symbol : String.String }"},"Data.Cargo":{"args":[],"type":"{ capacity : Basics.Int, units : Basics.Int, inventory : List.List () }"},"Data.Contract":{"args":[],"type":"{ accepted : Basics.Bool, factionSymbol : String.String, type_ : String.String, terms : Data.Terms, fulfilled : Basics.Bool, expiration : String.String, deadlineToAccept : String.String, id : String.String }"},"Data.Deliver":{"args":[],"type":"{ tradeSymbol : String.String, destinationSymbol : String.String, unitsRequired : Basics.Int, unitsFulfilled : Basics.Int }"},"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"},"Data.Payment":{"args":[],"type":"{ onAccepted : Basics.Int, onFulfilled : Basics.Int }"},"Data.Ship":{"args":[],"type":"{ cargo : Data.Cargo }"},"Data.Terms":{"args":[],"type":"{ deadline : String.String, deliver : List.List Data.Deliver, payment : Data.Payment }"},"Data.UserRegistration":{"args":[],"type":"{ token : String.String, agent : Data.Agent, contract : Data.Contract, faction : Data.Faction, ship : Data.Ship }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"Logout":[],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error Data.UserRegistration"],"LoginUser":["Result.Result Http.Error String.String"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Agent":{"args":[],"type":"{ accountId : String.String, credits : Basics.Int, headquarters : String.String, startingFaction : String.String, symbol : String.String }"},"Data.Cargo":{"args":[],"type":"{ capacity : Basics.Int, units : Basics.Int, inventory : List.List () }"},"Data.Contract":{"args":[],"type":"{ accepted : Basics.Bool, factionSymbol : String.String, type_ : String.String, terms : Data.Terms, fulfilled : Basics.Bool, expiration : String.String, deadlineToAccept : String.String, id : String.String }"},"Data.Deliver":{"args":[],"type":"{ tradeSymbol : String.String, destinationSymbol : String.String, unitsRequired : Basics.Int, unitsFulfilled : Basics.Int }"},"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"},"Data.Payment":{"args":[],"type":"{ onAccepted : Basics.Int, onFulfilled : Basics.Int }"},"Data.Ship":{"args":[],"type":"{ cargo : Data.Cargo }"},"Data.Terms":{"args":[],"type":"{ deadline : String.String, deliver : List.List Data.Deliver, payment : Data.Payment }"},"Data.UserRegistration":{"args":[],"type":"{ token : String.String, agent : Data.Agent, contract : Data.Contract, faction : Data.Faction, ship : Data.Ship }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"NextContract":[],"PrevContract":[],"Logout":[],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error Data.UserRegistration"],"LoginUser":["Result.Result Http.Error String.String"],"Contracts":["Result.Result Http.Error (List.List Data.Contract)"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));

@@ -12,6 +12,7 @@ type alias Model =
     , inputToken : String
     , currentView : String
     , acceptedContracts : List ContractResult
+    , selectedIndex : Int
     }
 
 
