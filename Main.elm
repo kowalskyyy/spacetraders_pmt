@@ -25,6 +25,9 @@ init _ =
         data =
             { credits = 0
             , loans = loanDefault
+            , agent = agentInit
+            , faction = factionInit
+            , contract = contractInit
             }
 
         loanDefault =

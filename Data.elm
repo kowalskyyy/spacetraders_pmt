@@ -13,7 +13,10 @@ type alias Model =
 
 type alias GameData =
     { credits : Int
-    , headquarters : String
+    , loans : Loan
+    , agent : Agent
+    , faction : Faction
+    , contract : Contract
     }
 
 
@@ -40,9 +43,34 @@ type alias Agent =
 
 type alias Contract =
     { accepted : Bool
-    , deadlineToAccept : Date
-    , expiration : Date
+    , deadlineToAccept : Maybe Date
+    , expiration : Maybe Date
     , factionSymbol : String
     , fulfilled : Bool
     , id : String
+    }
+
+
+contractInit =
+    { accepted = False
+    , deadlineToAccept = Nothing
+    , expiration = Nothing
+    , factionSymbol = ""
+    , fulfilled = False
+    , id = ""
+    }
+
+
+agentInit =
+    { accountId = ""
+    , credits = 0
+    , headquarters = ""
+    , startingFaction = ""
+    , symbol = ""
+    }
+
+
+factionInit =
+    { symbol = ""
+    , reputation = 0
     }
