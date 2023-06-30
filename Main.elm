@@ -1,9 +1,10 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, div, h1, h2, input, label, button, text)
+import Html exposing (Html, button, div, h1, h2, input, label, text)
 import Html.Attributes exposing (placeholder)
 import Html.Events exposing (onClick, onInput)
+
 
 
 -- Model
@@ -16,16 +17,16 @@ type alias Model =
     , gameData : GameData
     }
 
+
 type alias GameData =
-    {
-        credits : Int
-        , loans : Loan
+    { credits : Int
+    , loans : Loan
     }
 
+
 type alias Loan =
-    {
-        loanName : String
-        , loanValue : Int
+    { loanName : String
+    , loanValue : Int
     }
 
 
@@ -33,23 +34,21 @@ init : Model
 init =
     let
         data =
-            {
-                credits = 0
-                , loans = loanDefault
+            { credits = 0
+            , loans = loanDefault
             }
+
         loanDefault =
-            {
-                loanName = ""
-                , loanValue = 100
+            { loanName = ""
+            , loanValue = 100
             }
-
-
     in
-        { username = ""
-        , response = ""
-        , accessToken = ""
-        , gameData = data
-        }
+    { username = ""
+    , response = ""
+    , accessToken = ""
+    , gameData = data
+    }
+
 
 
 -- Msg
@@ -58,6 +57,7 @@ init =
 type Msg
     = SetUsername String
     | Submit
+
 
 
 -- Update
@@ -73,6 +73,7 @@ update msg model =
             model
 
 
+
 -- View
 
 
@@ -86,6 +87,7 @@ view model =
         , h2 [] [ text "Response:" ]
         , div [] [ text model.response ]
         ]
+
 
 
 -- Main program
