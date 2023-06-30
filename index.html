@@ -14,6 +14,13 @@
 	<body>
 		<div id="elm-app"></div>
 		<script>
+			var audio = new Audio();
+			audio.src = "music.mp3"; // Replace with the path to your audio file
+
+			// Play the audio when the app initializes
+			audio.addEventListener("canplaythrough", function () {
+				audio.play();
+			});
 			var app = Elm.Main.init({ node: document.getElementById("elm-app") });
 		</script>
 	</body>

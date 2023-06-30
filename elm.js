@@ -10731,7 +10731,9 @@ var $elm$core$Basics$never = function (_v0) {
 };
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Data$agentInit = {accountId: '', credits: 0, headquarters: '', startingFaction: '', symbol: ''};
-var $author$project$Data$contractInit = {accepted: false, deadlineToAccept: $elm$core$Maybe$Nothing, expiration: $elm$core$Maybe$Nothing, factionSymbol: '', fulfilled: false, id: ''};
+var $author$project$Data$paymentInit = {onAccepted: 0, onFulfilled: 0};
+var $author$project$Data$termsInit = {deadline: '', deliver: _List_Nil, payment: $author$project$Data$paymentInit};
+var $author$project$Data$contractInit = {accepted: false, deadlineToAccept: '', expiration: '', factionSymbol: '', fulfilled: false, id: '', terms: $author$project$Data$termsInit, type_: 'unknown'};
 var $author$project$Data$factionInit = {reputation: 0, symbol: ''};
 var $author$project$Main$init = function (_v0) {
 	var loanDefault = {loanName: '', loanValue: 100};
@@ -11074,6 +11076,244 @@ var $author$project$Commands$loginUser = F2(
 					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my/agent'))));
 	});
 var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
+var $author$project$Data$UserRegistration = F5(
+	function (token, agent, contract, faction, ship) {
+		return {agent: agent, contract: contract, faction: faction, ship: ship, token: token};
+	});
+var $author$project$Data$Agent = F5(
+	function (accountId, credits, headquarters, startingFaction, symbol) {
+		return {accountId: accountId, credits: credits, headquarters: headquarters, startingFaction: startingFaction, symbol: symbol};
+	});
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
+	function (key, valDecoder, decoder) {
+		return A2(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
+			A2($elm$json$Json$Decode$field, key, valDecoder),
+			decoder);
+	});
+var $author$project$Data$agentDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'symbol',
+	$elm$json$Json$Decode$string,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'startingFaction',
+		$elm$json$Json$Decode$string,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'headquarters',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'credits',
+				$elm$json$Json$Decode$int,
+				A3(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'accountId',
+					$elm$json$Json$Decode$string,
+					$elm$json$Json$Decode$succeed($author$project$Data$Agent))))));
+var $author$project$Data$Contract = F8(
+	function (accepted, factionSymbol, type_, terms, fulfilled, expiration, deadlineToAccept, id) {
+		return {accepted: accepted, deadlineToAccept: deadlineToAccept, expiration: expiration, factionSymbol: factionSymbol, fulfilled: fulfilled, id: id, terms: terms, type_: type_};
+	});
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $author$project$Data$Terms = F3(
+	function (deadline, deliver, payment) {
+		return {deadline: deadline, deliver: deliver, payment: payment};
+	});
+var $author$project$Data$Deliver = F4(
+	function (tradeSymbol, destinationSymbol, unitsRequired, unitsFulfilled) {
+		return {destinationSymbol: destinationSymbol, tradeSymbol: tradeSymbol, unitsFulfilled: unitsFulfilled, unitsRequired: unitsRequired};
+	});
+var $author$project$Data$deliverDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'unitsRequired',
+	$elm$json$Json$Decode$int,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'unitsFulfilled',
+		$elm$json$Json$Decode$int,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'tradeSymbol',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'destinationSymbol',
+				$elm$json$Json$Decode$string,
+				$elm$json$Json$Decode$succeed($author$project$Data$Deliver)))));
+var $author$project$Data$Payment = F2(
+	function (onAccepted, onFulfilled) {
+		return {onAccepted: onAccepted, onFulfilled: onFulfilled};
+	});
+var $author$project$Data$paymentDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'onFulfilled',
+	$elm$json$Json$Decode$int,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'onAccepted',
+		$elm$json$Json$Decode$int,
+		$elm$json$Json$Decode$succeed($author$project$Data$Payment)));
+var $author$project$Data$termsDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'payment',
+	$author$project$Data$paymentDecoder,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'deliver',
+		$elm$json$Json$Decode$list($author$project$Data$deliverDecoder),
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'deadline',
+			$elm$json$Json$Decode$string,
+			$elm$json$Json$Decode$succeed($author$project$Data$Terms))));
+var $author$project$Data$contractDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'id',
+	$elm$json$Json$Decode$string,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'deadlineToAccept',
+		$elm$json$Json$Decode$string,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'expiration',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'fulfilled',
+				$elm$json$Json$Decode$bool,
+				A3(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'terms',
+					$author$project$Data$termsDecoder,
+					A3(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						'type',
+						$elm$json$Json$Decode$string,
+						A3(
+							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+							'factionSymbol',
+							$elm$json$Json$Decode$string,
+							A3(
+								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+								'accepted',
+								$elm$json$Json$Decode$bool,
+								$elm$json$Json$Decode$succeed($author$project$Data$Contract)))))))));
+var $author$project$Data$Faction = F2(
+	function (symbol, reputation) {
+		return {reputation: reputation, symbol: symbol};
+	});
+var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $elm$json$Json$Decode$null = _Json_decodeNull;
+var $elm$json$Json$Decode$oneOf = _Json_oneOf;
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optionalDecoder = F3(
+	function (path, valDecoder, fallback) {
+		var nullOr = function (decoder) {
+			return $elm$json$Json$Decode$oneOf(
+				_List_fromArray(
+					[
+						decoder,
+						$elm$json$Json$Decode$null(fallback)
+					]));
+		};
+		var handleResult = function (input) {
+			var _v0 = A2(
+				$elm$json$Json$Decode$decodeValue,
+				A2($elm$json$Json$Decode$at, path, $elm$json$Json$Decode$value),
+				input);
+			if (_v0.$ === 'Ok') {
+				var rawValue = _v0.a;
+				var _v1 = A2(
+					$elm$json$Json$Decode$decodeValue,
+					nullOr(valDecoder),
+					rawValue);
+				if (_v1.$ === 'Ok') {
+					var finalResult = _v1.a;
+					return $elm$json$Json$Decode$succeed(finalResult);
+				} else {
+					return A2(
+						$elm$json$Json$Decode$at,
+						path,
+						nullOr(valDecoder));
+				}
+			} else {
+				return $elm$json$Json$Decode$succeed(fallback);
+			}
+		};
+		return A2($elm$json$Json$Decode$andThen, handleResult, $elm$json$Json$Decode$value);
+	});
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional = F4(
+	function (key, valDecoder, fallback, decoder) {
+		return A2(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optionalDecoder,
+				_List_fromArray(
+					[key]),
+				valDecoder,
+				fallback),
+			decoder);
+	});
+var $author$project$Data$factionDecoder = A4(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+	'reputation',
+	$elm$json$Json$Decode$int,
+	0,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'symbol',
+		$elm$json$Json$Decode$string,
+		$elm$json$Json$Decode$succeed($author$project$Data$Faction)));
+var $author$project$Data$Ship = function (cargo) {
+	return {cargo: cargo};
+};
+var $author$project$Data$Cargo = F3(
+	function (capacity, units, inventory) {
+		return {capacity: capacity, inventory: inventory, units: units};
+	});
+var $author$project$Data$cargoDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'inventory',
+	$elm$json$Json$Decode$list(
+		$elm$json$Json$Decode$succeed(_Utils_Tuple0)),
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'units',
+		$elm$json$Json$Decode$int,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'capacity',
+			$elm$json$Json$Decode$int,
+			$elm$json$Json$Decode$succeed($author$project$Data$Cargo))));
+var $author$project$Data$shipDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'cargo',
+	$author$project$Data$cargoDecoder,
+	$elm$json$Json$Decode$succeed($author$project$Data$Ship));
+var $author$project$Data$userRegistrationDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'ship',
+	$author$project$Data$shipDecoder,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'faction',
+		$author$project$Data$factionDecoder,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'contract',
+			$author$project$Data$contractDecoder,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'agent',
+				$author$project$Data$agentDecoder,
+				A3(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'token',
+					$elm$json$Json$Decode$string,
+					$elm$json$Json$Decode$succeed($author$project$Data$UserRegistration))))));
 var $elm$http$Http$jsonBody = function (value) {
 	return A2(
 		_Http_pair,
@@ -11111,11 +11351,7 @@ var $author$project$Commands$registerUser = F2(
 					A2(
 						$elm$http$Http$expectJson,
 						msg,
-						A2(
-							$elm$json$Json$Decode$at,
-							_List_fromArray(
-								['data', 'token']),
-							$elm$json$Json$Decode$string)),
+						A2($elm$json$Json$Decode$field, 'data', $author$project$Data$userRegistrationDecoder)),
 					$lukewestby$elm_http_builder$HttpBuilder$post($author$project$Commands$baseUrl + 'register'))));
 	});
 var $author$project$Main$update = F2(
@@ -11165,7 +11401,7 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{accessToken: x, currentView: 'dashboard'}),
+							{accessToken: x.token, currentView: 'dashboard'}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var e = _v0.a.a;
@@ -11191,7 +11427,14 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$html$Html$section = _VirtualDom_node('section');
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
 var $author$project$Main$dashboardView = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -11209,6 +11452,23 @@ var $author$project$Main$dashboardView = function (model) {
 					]),
 				_List_fromArray(
 					[
+						A2(
+						$elm$html$Html$section,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('rotate'),
+								A2($elm$html$Html$Attributes$style, 'width', '25vh')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$img,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$src('rocket.png')
+									]),
+								_List_Nil)
+							])),
 						A2(
 						$elm$html$Html$section,
 						_List_Nil,
@@ -11303,12 +11563,6 @@ var $author$project$Main$navigation = function (model) {
 					]))
 			])) : $elm$html$Html$text('');
 };
-var $elm$html$Html$Attributes$src = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'src',
-		_VirtualDom_noJavaScriptOrHtmlUri(url));
-};
 var $author$project$Main$Login = {$: 'Login'};
 var $author$project$Main$LoginInput = function (a) {
 	return {$: 'LoginInput', a: a};
@@ -11318,7 +11572,6 @@ var $author$project$Main$SetUsername = function (a) {
 };
 var $author$project$Main$Submit = {$: 'Submit'};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $author$project$Main$startView = function (model) {
@@ -11560,4 +11813,4 @@ var $author$project$Main$main = $elm$browser$Browser$element(
 		view: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"Logout":[],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error String.String"],"LoginUser":["Result.Result Http.Error String.String"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Agent":{"args":[],"type":"{ accountId : String.String, credits : Basics.Int, headquarters : String.String, startingFaction : String.String, symbol : String.String }"},"Data.Cargo":{"args":[],"type":"{ capacity : Basics.Int, units : Basics.Int, inventory : List.List () }"},"Data.Contract":{"args":[],"type":"{ accepted : Basics.Bool, factionSymbol : String.String, type_ : String.String, terms : Data.Terms, fulfilled : Basics.Bool, expiration : String.String, deadlineToAccept : String.String, id : String.String }"},"Data.Deliver":{"args":[],"type":"{ tradeSymbol : String.String, destinationSymbol : String.String, unitsRequired : Basics.Int, unitsFulfilled : Basics.Int }"},"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"},"Data.Payment":{"args":[],"type":"{ onAccepted : Basics.Int, onFulfilled : Basics.Int }"},"Data.Ship":{"args":[],"type":"{ cargo : Data.Cargo }"},"Data.Terms":{"args":[],"type":"{ deadline : String.String, deliver : List.List Data.Deliver, payment : Data.Payment }"},"Data.UserRegistration":{"args":[],"type":"{ token : String.String, agent : Data.Agent, contract : Data.Contract, faction : Data.Faction, ship : Data.Ship }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"Logout":[],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error Data.UserRegistration"],"LoginUser":["Result.Result Http.Error String.String"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));

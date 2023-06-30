@@ -228,4 +228,4 @@ accountView model =
 
 dashboardView : Model -> Html Msg
 dashboardView model =
-    div [ class "right-section" ] [ div [ class "account-details" ] [ section [] [ text ("Username: " ++ model.username) ], section [] [ text ("Access token: " ++ model.accessToken) ], section [] [ text ("Credits: " ++ String.fromInt model.gameData.credits) ] ] ]
+    div [ class "right-section" ] [ div [ class "account-details" ] [ section [ class "rotate", style "width" "25vh" ] [ img [ src "rocket.png" ] [] ], section [] [ text ("Username: " ++ model.username) ], section [] [ text ("Access token: " ++ model.accessToken) ], section [] [ text ("Credits: " ++ String.fromInt model.gameData.credits) ] ] ]
