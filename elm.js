@@ -10738,8 +10738,14 @@ var $author$project$Main$init = function (_v0) {
 	var loanDefault = {loanName: '', loanValue: 100};
 	var data = {agent: $author$project$Data$agentInit, contracts: _List_Nil, credits: 0, faction: $author$project$Data$factionInit, ship: $author$project$Data$initShip};
 	return _Utils_Tuple2(
-		{accessToken: '', currentView: 'startView', gameData: data, inputToken: '', selectedIndex: 0, username: ''},
+		{acceptedContracts: _List_Nil, accessToken: '', currentView: 'startView', gameData: data, inputToken: '', selectedIndex: 0, username: ''},
 		$elm$core$Platform$Cmd$none);
+};
+var $author$project$Main$AcceptContract = function (a) {
+	return {$: 'AcceptContract', a: a};
+};
+var $author$project$Main$Contracts = function (a) {
+	return {$: 'Contracts', a: a};
 };
 var $author$project$Main$LoginUser = function (a) {
 	return {$: 'LoginUser', a: a};
@@ -10747,8 +10753,142 @@ var $author$project$Main$LoginUser = function (a) {
 var $author$project$Main$RegisterUser = function (a) {
 	return {$: 'RegisterUser', a: a};
 };
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Commands$baseUrl = 'https://api.spacetraders.io/v2/';
+var $author$project$Data$ContractResult = F2(
+	function (contract, agent) {
+		return {agent: agent, contract: contract};
+	});
+var $author$project$Data$Agent = F5(
+	function (accountId, credits, headquarters, startingFaction, symbol) {
+		return {accountId: accountId, credits: credits, headquarters: headquarters, startingFaction: startingFaction, symbol: symbol};
+	});
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
+	function (key, valDecoder, decoder) {
+		return A2(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
+			A2($elm$json$Json$Decode$field, key, valDecoder),
+			decoder);
+	});
+var $author$project$Data$agentDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'symbol',
+	$elm$json$Json$Decode$string,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'startingFaction',
+		$elm$json$Json$Decode$string,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'headquarters',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'credits',
+				$elm$json$Json$Decode$int,
+				A3(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'accountId',
+					$elm$json$Json$Decode$string,
+					$elm$json$Json$Decode$succeed($author$project$Data$Agent))))));
+var $author$project$Data$Contract = F8(
+	function (accepted, factionSymbol, type_, terms, fulfilled, expiration, deadlineToAccept, id) {
+		return {accepted: accepted, deadlineToAccept: deadlineToAccept, expiration: expiration, factionSymbol: factionSymbol, fulfilled: fulfilled, id: id, terms: terms, type_: type_};
+	});
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $author$project$Data$Terms = F3(
+	function (deadline, deliver, payment) {
+		return {deadline: deadline, deliver: deliver, payment: payment};
+	});
+var $author$project$Data$Deliver = F4(
+	function (tradeSymbol, destinationSymbol, unitsRequired, unitsFulfilled) {
+		return {destinationSymbol: destinationSymbol, tradeSymbol: tradeSymbol, unitsFulfilled: unitsFulfilled, unitsRequired: unitsRequired};
+	});
+var $author$project$Data$deliverDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'unitsRequired',
+	$elm$json$Json$Decode$int,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'unitsFulfilled',
+		$elm$json$Json$Decode$int,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'tradeSymbol',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'destinationSymbol',
+				$elm$json$Json$Decode$string,
+				$elm$json$Json$Decode$succeed($author$project$Data$Deliver)))));
+var $author$project$Data$Payment = F2(
+	function (onAccepted, onFulfilled) {
+		return {onAccepted: onAccepted, onFulfilled: onFulfilled};
+	});
+var $author$project$Data$paymentDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'onFulfilled',
+	$elm$json$Json$Decode$int,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'onAccepted',
+		$elm$json$Json$Decode$int,
+		$elm$json$Json$Decode$succeed($author$project$Data$Payment)));
+var $author$project$Data$termsDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'payment',
+	$author$project$Data$paymentDecoder,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'deliver',
+		$elm$json$Json$Decode$list($author$project$Data$deliverDecoder),
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'deadline',
+			$elm$json$Json$Decode$string,
+			$elm$json$Json$Decode$succeed($author$project$Data$Terms))));
+var $author$project$Data$contractDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'id',
+	$elm$json$Json$Decode$string,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'deadlineToAccept',
+		$elm$json$Json$Decode$string,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'expiration',
+			$elm$json$Json$Decode$string,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'fulfilled',
+				$elm$json$Json$Decode$bool,
+				A3(
+					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+					'terms',
+					$author$project$Data$termsDecoder,
+					A3(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						'type',
+						$elm$json$Json$Decode$string,
+						A3(
+							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+							'factionSymbol',
+							$elm$json$Json$Decode$string,
+							A3(
+								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+								'accepted',
+								$elm$json$Json$Decode$bool,
+								$elm$json$Json$Decode$succeed($author$project$Data$Contract)))))))));
+var $author$project$Data$contractResultDecoder = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'agent',
+	$author$project$Data$agentDecoder,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'contract',
+		$author$project$Data$contractDecoder,
+		$elm$json$Json$Decode$succeed($author$project$Data$ContractResult)));
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -10865,7 +11005,7 @@ var $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl = F2(
 			withCredentials: false
 		};
 	});
-var $lukewestby$elm_http_builder$HttpBuilder$get = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('GET');
+var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
 var $elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
 };
@@ -11052,6 +11192,47 @@ var $lukewestby$elm_http_builder$HttpBuilder$withHeaders = F2(
 					builder.headers)
 			});
 	});
+var $author$project$Commands$acceptContract = F3(
+	function (token, contractId, msg) {
+		return $lukewestby$elm_http_builder$HttpBuilder$request(
+			A2(
+				$lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				A2(
+					$elm$http$Http$expectJson,
+					msg,
+					A2($elm$json$Json$Decode$field, 'data', $author$project$Data$contractResultDecoder)),
+				A2(
+					$lukewestby$elm_http_builder$HttpBuilder$withHeaders,
+					_List_fromArray(
+						[
+							_Utils_Tuple2('Content-Type', 'application/json'),
+							_Utils_Tuple2('Authorization', 'Bearer ' + token)
+						]),
+					$lukewestby$elm_http_builder$HttpBuilder$post($author$project$Commands$baseUrl + ('my/contracts/' + (contractId + '/accept'))))));
+	});
+var $lukewestby$elm_http_builder$HttpBuilder$get = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('GET');
+var $author$project$Commands$getContracts = F2(
+	function (token, msg) {
+		return $lukewestby$elm_http_builder$HttpBuilder$request(
+			A2(
+				$lukewestby$elm_http_builder$HttpBuilder$withExpect,
+				A2(
+					$elm$http$Http$expectJson,
+					msg,
+					A2(
+						$elm$json$Json$Decode$field,
+						'data',
+						$elm$json$Json$Decode$list($author$project$Data$contractDecoder))),
+				A2(
+					$lukewestby$elm_http_builder$HttpBuilder$withHeaders,
+					_List_fromArray(
+						[
+							_Utils_Tuple2('Content-Type', 'application/json'),
+							_Utils_Tuple2('Authorization', 'Bearer ' + token)
+						]),
+					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my/contracts'))));
+	});
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Commands$loginUser = F2(
 	function (token, msg) {
 		return $lukewestby$elm_http_builder$HttpBuilder$request(
@@ -11074,133 +11255,10 @@ var $author$project$Commands$loginUser = F2(
 						]),
 					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my/agent'))));
 	});
-var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
 var $author$project$Data$UserRegistration = F5(
 	function (token, agent, contract, faction, ship) {
 		return {agent: agent, contract: contract, faction: faction, ship: ship, token: token};
 	});
-var $author$project$Data$Agent = F5(
-	function (accountId, credits, headquarters, startingFaction, symbol) {
-		return {accountId: accountId, credits: credits, headquarters: headquarters, startingFaction: startingFaction, symbol: symbol};
-	});
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
-var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
-	function (key, valDecoder, decoder) {
-		return A2(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
-			A2($elm$json$Json$Decode$field, key, valDecoder),
-			decoder);
-	});
-var $author$project$Data$agentDecoder = A3(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'symbol',
-	$elm$json$Json$Decode$string,
-	A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'startingFaction',
-		$elm$json$Json$Decode$string,
-		A3(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'headquarters',
-			$elm$json$Json$Decode$string,
-			A3(
-				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-				'credits',
-				$elm$json$Json$Decode$int,
-				A3(
-					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-					'accountId',
-					$elm$json$Json$Decode$string,
-					$elm$json$Json$Decode$succeed($author$project$Data$Agent))))));
-var $author$project$Data$Contract = F8(
-	function (accepted, factionSymbol, type_, terms, fulfilled, expiration, deadlineToAccept, id) {
-		return {accepted: accepted, deadlineToAccept: deadlineToAccept, expiration: expiration, factionSymbol: factionSymbol, fulfilled: fulfilled, id: id, terms: terms, type_: type_};
-	});
-var $elm$json$Json$Decode$bool = _Json_decodeBool;
-var $author$project$Data$Terms = F3(
-	function (deadline, deliver, payment) {
-		return {deadline: deadline, deliver: deliver, payment: payment};
-	});
-var $author$project$Data$Deliver = F4(
-	function (tradeSymbol, destinationSymbol, unitsRequired, unitsFulfilled) {
-		return {destinationSymbol: destinationSymbol, tradeSymbol: tradeSymbol, unitsFulfilled: unitsFulfilled, unitsRequired: unitsRequired};
-	});
-var $author$project$Data$deliverDecoder = A3(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'unitsRequired',
-	$elm$json$Json$Decode$int,
-	A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'unitsFulfilled',
-		$elm$json$Json$Decode$int,
-		A3(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'tradeSymbol',
-			$elm$json$Json$Decode$string,
-			A3(
-				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-				'destinationSymbol',
-				$elm$json$Json$Decode$string,
-				$elm$json$Json$Decode$succeed($author$project$Data$Deliver)))));
-var $author$project$Data$Payment = F2(
-	function (onAccepted, onFulfilled) {
-		return {onAccepted: onAccepted, onFulfilled: onFulfilled};
-	});
-var $author$project$Data$paymentDecoder = A3(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'onFulfilled',
-	$elm$json$Json$Decode$int,
-	A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'onAccepted',
-		$elm$json$Json$Decode$int,
-		$elm$json$Json$Decode$succeed($author$project$Data$Payment)));
-var $author$project$Data$termsDecoder = A3(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'payment',
-	$author$project$Data$paymentDecoder,
-	A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'deliver',
-		$elm$json$Json$Decode$list($author$project$Data$deliverDecoder),
-		A3(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'deadline',
-			$elm$json$Json$Decode$string,
-			$elm$json$Json$Decode$succeed($author$project$Data$Terms))));
-var $author$project$Data$contractDecoder = A3(
-	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-	'id',
-	$elm$json$Json$Decode$string,
-	A3(
-		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-		'deadlineToAccept',
-		$elm$json$Json$Decode$string,
-		A3(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'expiration',
-			$elm$json$Json$Decode$string,
-			A3(
-				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-				'fulfilled',
-				$elm$json$Json$Decode$bool,
-				A3(
-					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-					'terms',
-					$author$project$Data$termsDecoder,
-					A3(
-						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-						'type',
-						$elm$json$Json$Decode$string,
-						A3(
-							$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-							'factionSymbol',
-							$elm$json$Json$Decode$string,
-							A3(
-								$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-								'accepted',
-								$elm$json$Json$Decode$bool,
-								$elm$json$Json$Decode$succeed($author$project$Data$Contract)))))))));
 var $author$project$Data$Faction = F2(
 	function (symbol, reputation) {
 		return {reputation: reputation, symbol: symbol};
@@ -11448,6 +11506,20 @@ var $author$project$Main$update = F2(
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
+			case 'AcceptContract':
+				if (_v0.a.$ === 'Ok') {
+					var x = _v0.a.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								acceptedContracts: A2($elm$core$List$cons, x, model.acceptedContracts)
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					var e = _v0.a.a;
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
 			case 'NextContract':
 				var nextIndex = model.selectedIndex + 1;
 				return _Utils_Tuple2(
@@ -11455,16 +11527,32 @@ var $author$project$Main$update = F2(
 						model,
 						{selectedIndex: nextIndex}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'PrevContract':
 				var prevIndex = model.selectedIndex - 1;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{selectedIndex: prevIndex}),
 					$elm$core$Platform$Cmd$none);
+			case 'GetContracts':
+				var x = _v0.a;
+				return _Utils_Tuple2(
+					model,
+					A2($author$project$Commands$getContracts, x, $author$project$Main$Contracts));
+			default:
+				var x = _v0.a;
+				return _Utils_Tuple2(
+					model,
+					A3($author$project$Commands$acceptContract, model.accessToken, x, $author$project$Main$AcceptContract));
 		}
 	});
+var $author$project$Main$GetContracts = function (a) {
+	return {$: 'GetContracts', a: a};
+};
 var $author$project$Main$NextContract = {$: 'NextContract'};
+var $author$project$Main$PickContract = function (a) {
+	return {$: 'PickContract', a: a};
+};
 var $author$project$Main$PrevContract = {$: 'PrevContract'};
 var $elm$core$List$head = function (list) {
 	if (list.b) {
@@ -11495,11 +11583,39 @@ var $author$project$Main$stringFromBool = function (value) {
 	return value ? 'True' : 'False';
 };
 var $author$project$Main$contractsView = function (model) {
+	var contract = A2(
+		$elm$core$Maybe$withDefault,
+		{
+			accepted: false,
+			deadlineToAccept: '',
+			expiration: '',
+			factionSymbol: '',
+			fulfilled: false,
+			id: '',
+			terms: {
+				deadline: '',
+				deliver: _List_Nil,
+				payment: {onAccepted: 0, onFulfilled: 0}
+			},
+			type_: ''
+		},
+		A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts));
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$GetContracts(model.accessToken))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Get contracts')
+					])),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
@@ -11546,6 +11662,24 @@ var $author$project$Main$contractsView = function (model) {
 							},
 							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).factionSymbol),
 						$elm$html$Html$text(
+						'Contract Id: ' + A2(
+							$elm$core$Maybe$withDefault,
+							{
+								accepted: false,
+								deadlineToAccept: '',
+								expiration: '',
+								factionSymbol: '',
+								fulfilled: false,
+								id: '',
+								terms: {
+									deadline: '',
+									deliver: _List_Nil,
+									payment: {onAccepted: 0, onFulfilled: 0}
+								},
+								type_: ''
+							},
+							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).id),
+						$elm$html$Html$text(
 						'Type: ' + A2(
 							$elm$core$Maybe$withDefault,
 							{
@@ -11578,6 +11712,17 @@ var $author$project$Main$contractsView = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text('<')
+							])),
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick(
+								$author$project$Main$PickContract(contract.id))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Accept contract')
 							])),
 						A2(
 						$elm$html$Html$button,
@@ -11978,4 +12123,4 @@ var $author$project$Main$main = $elm$browser$Browser$element(
 		view: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Agent":{"args":[],"type":"{ accountId : String.String, credits : Basics.Int, headquarters : String.String, startingFaction : String.String, symbol : String.String }"},"Data.Cargo":{"args":[],"type":"{ capacity : Basics.Int, units : Basics.Int, inventory : List.List () }"},"Data.Contract":{"args":[],"type":"{ accepted : Basics.Bool, factionSymbol : String.String, type_ : String.String, terms : Data.Terms, fulfilled : Basics.Bool, expiration : String.String, deadlineToAccept : String.String, id : String.String }"},"Data.Deliver":{"args":[],"type":"{ tradeSymbol : String.String, destinationSymbol : String.String, unitsRequired : Basics.Int, unitsFulfilled : Basics.Int }"},"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"},"Data.Payment":{"args":[],"type":"{ onAccepted : Basics.Int, onFulfilled : Basics.Int }"},"Data.Ship":{"args":[],"type":"{ cargo : Data.Cargo }"},"Data.Terms":{"args":[],"type":"{ deadline : String.String, deliver : List.List Data.Deliver, payment : Data.Payment }"},"Data.UserRegistration":{"args":[],"type":"{ token : String.String, agent : Data.Agent, contract : Data.Contract, faction : Data.Faction, ship : Data.Ship }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"NextContract":[],"PrevContract":[],"Logout":[],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error Data.UserRegistration"],"LoginUser":["Result.Result Http.Error String.String"],"Contracts":["Result.Result Http.Error (List.List Data.Contract)"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Agent":{"args":[],"type":"{ accountId : String.String, credits : Basics.Int, headquarters : String.String, startingFaction : String.String, symbol : String.String }"},"Data.Cargo":{"args":[],"type":"{ capacity : Basics.Int, units : Basics.Int, inventory : List.List () }"},"Data.Contract":{"args":[],"type":"{ accepted : Basics.Bool, factionSymbol : String.String, type_ : String.String, terms : Data.Terms, fulfilled : Basics.Bool, expiration : String.String, deadlineToAccept : String.String, id : String.String }"},"Data.ContractResult":{"args":[],"type":"{ contract : Data.Contract, agent : Data.Agent }"},"Data.Deliver":{"args":[],"type":"{ tradeSymbol : String.String, destinationSymbol : String.String, unitsRequired : Basics.Int, unitsFulfilled : Basics.Int }"},"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"},"Data.Payment":{"args":[],"type":"{ onAccepted : Basics.Int, onFulfilled : Basics.Int }"},"Data.Ship":{"args":[],"type":"{ cargo : Data.Cargo }"},"Data.Terms":{"args":[],"type":"{ deadline : String.String, deliver : List.List Data.Deliver, payment : Data.Payment }"},"Data.UserRegistration":{"args":[],"type":"{ token : String.String, agent : Data.Agent, contract : Data.Contract, faction : Data.Faction, ship : Data.Ship }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"NextContract":[],"PrevContract":[],"Logout":[],"Login":[],"GetContracts":["String.String"],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error Data.UserRegistration"],"LoginUser":["Result.Result Http.Error String.String"],"Contracts":["Result.Result Http.Error (List.List Data.Contract)"],"AcceptContract":["Result.Result Http.Error Data.ContractResult"],"PickContract":["String.String"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
