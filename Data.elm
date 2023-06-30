@@ -38,7 +38,7 @@ factionDecoder : Decoder Faction
 factionDecoder =
     succeed Faction
         |> required "symbol" string
-        |> required "reputation" int
+        |> optional "reputation" int 0
 
 
 type alias UserRegistration =

@@ -44,7 +44,7 @@ registerUser username msg =
                 ]
     in
     HttpBuilder.post (baseUrl ++ "register")
-        |> withExpect (Http.expectJson msg userRegistrationDecoder)
+        |> withExpect (Http.expectJson msg (field "data" userRegistrationDecoder))
         |> withJsonBody payload
         |> request
 
