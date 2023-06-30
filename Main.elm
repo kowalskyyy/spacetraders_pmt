@@ -4,6 +4,7 @@ import Browser
 import Html exposing (Html, button, div, h1, h2, img, input, label, text)
 import Html.Attributes exposing (class, placeholder, src, style)
 import Html.Events exposing (onClick, onInput)
+import Http
 
 
 
@@ -30,8 +31,17 @@ type alias Loan =
     }
 
 
-init : Model
-init =
+
+-- Main program
+
+
+main : Program () Model Msg
+main =
+    Browser.element { init = init, update = update, view = view, subscriptions = \_ -> Sub.batch [] }
+
+
+init : flags -> ( Model, Cmd Msg )
+init _ =
     let
         data =
             { credits = 0
@@ -43,11 +53,13 @@ init =
             , loanValue = 100
             }
     in
-    { username = ""
-    , accessToken = ""
-    , gameData = data
-    , currentView = "startView"
-    }
+    ( { username = ""
+      , accessToken = ""
+      , gameData = data
+      , currentView = "startView"
+      }
+    , Commands.getFactions GetFactions
+    )
 
 
 
@@ -60,29 +72,36 @@ type Msg
     | ChangeView String
     | Register String
     | Login String
+    | GetFactions (Result Http.Error (List Faction))
 
 
 
 -- Update
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
+    case Debug.log "msg" msg of
         SetUsername username ->
-            { model | username = username }
+            ( { model | username = username }, Cmd.none )
 
         Submit ->
-            model
+            ( model, Cmd.none )
 
         ChangeView x ->
-            { model | currentView = x }
+            ( { model | currentView = x }, Cmd.none )
 
         Register name ->
-            model
+            ( model, Cmd.none )
 
         Login toke ->
-            model
+            ( model, Cmd.none )
+
+        GetFactions (Ok x) ->
+            ( model, Cmd.none )
+
+        GetFactions (Err e) ->
+            ( model, Cmd.none )
 
 
 
@@ -143,15 +162,6 @@ navigation model =
 displayGameData : Model -> Html Msg
 displayGameData model =
     div [] [ div [] [ text "Credits: ", text (String.fromInt model.gameData.credits) ], div [] [ text "Loans: ", text model.gameData.loans.loanName, text "value :", text (String.fromInt model.gameData.loans.loanValue) ] ]
-
-
-
--- Main program
-
-
-main : Program () Model Msg
-main =
-    Browser.sandbox { init = init, update = update, view = view }
 
 
 startView : Model -> Html Msg
