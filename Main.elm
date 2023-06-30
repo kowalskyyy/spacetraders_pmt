@@ -272,6 +272,9 @@ stringFromBool value =
     else
         "False"
 
+renderAcceptedContract : ContractResult -> Html Msg
+renderAcceptedContract contract =
+    div [][text contract.contract.id]
 
 contractsView : Model -> Html Msg
 contractsView model =
@@ -284,10 +287,10 @@ contractsView model =
         [ button [onClick (GetContracts model.accessToken)][text "Get contracts"]
      ,    div [ class "contract-info" ]
             [ -- Display the contract information here
-              text <| "Accepted: " ++ stringFromBool (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).accepted
-            , text <| "Faction Symbol: " ++ (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).factionSymbol
-            , text <| "Contract Id: " ++ (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).id
-            , text <| "Type: " ++ (model.gameData.contracts |> getIndex model.selectedIndex |> Maybe.withDefault { accepted = False, factionSymbol = "", type_ = "", terms = { deadline = "", deliver = [], payment = { onAccepted = 0, onFulfilled = 0 } }, fulfilled = False, expiration = "", deadlineToAccept = "", id = "" }).type_
+              text <| "Accepted: " ++ stringFromBool contract.accepted
+            , text <| "Faction Symbol: " ++ contract.factionSymbol
+            , text <| "Contract Id: " ++ contract.id
+            , text <| "Type: " ++ contract.type_
 
             -- Display other contract fields as needed
             ]
@@ -296,6 +299,8 @@ contractsView model =
             , button [onClick (PickContract contract.id)][text "Accept contract"]
             , button [ onClick NextContract ] [ text ">" ]
             ]
+        , div [][text "Accepted contracts : "]
+        , div [] (List.map renderAcceptedContract model.acceptedContracts)
         ]
 
 
