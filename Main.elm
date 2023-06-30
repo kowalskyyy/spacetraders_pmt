@@ -27,6 +27,7 @@ init _ =
             , agent = agentInit
             , faction = factionInit
             , contract = contractInit
+            , ship = initShip
             }
 
         loanDefault =
@@ -89,7 +90,23 @@ update msg model =
             ( model, Cmd.none )
 
         RegisterUser (Ok x) ->
-            ( { model | accessToken = x.token, currentView = "dashboard" }, Cmd.none )
+            let
+                gd : GameData
+                gd =
+                    { credits = x.agent.credits
+                    , agent = x.agent
+                    , contract = x.contract
+                    , faction = x.faction
+                    , ship = x.ship
+                    }
+            in
+            ( { model
+                | accessToken = x.token
+                , gameData = gd
+                , currentView = "dashboard"
+              }
+            , Cmd.none
+            )
 
         RegisterUser (Err e) ->
             ( model, Cmd.none )

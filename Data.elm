@@ -19,6 +19,7 @@ type alias GameData =
     , agent : Agent
     , faction : Faction
     , contract : Contract
+    , ship : Ship
     }
 
 
@@ -210,6 +211,11 @@ type alias Ship =
     }
 
 
+initShip : Ship
+initShip =
+    { cargo = initCargo }
+
+
 shipDecoder : Decoder Ship
 shipDecoder =
     succeed Ship
@@ -233,6 +239,14 @@ type alias Cargo =
     { capacity : Int
     , units : Int
     , inventory : List ()
+    }
+
+
+initCargo : Cargo
+initCargo =
+    { capacity = 0
+    , units = 0
+    , inventory = []
     }
 
 
