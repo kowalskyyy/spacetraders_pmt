@@ -4956,7 +4956,7 @@ function _Browser_load(url)
 var $author$project$Main$init = function () {
 	var loanDefault = {loanName: '', loanValue: 100};
 	var data = {credits: 0, loans: loanDefault};
-	return {accessToken: 'et', currentView: 'startView', gameData: data, username: ''};
+	return {accessToken: '', currentView: 'startView', gameData: data, username: ''};
 }();
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
@@ -10601,50 +10601,67 @@ var $author$project$Main$update = F2(
 				return model;
 		}
 	});
-var $author$project$Main$navigation = A2(
-	$elm$html$Html$div,
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('navbar left-section')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$button,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Dashboard')
-				])),
-			A2(
-			$elm$html$Html$button,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Ships')
-				])),
-			A2(
-			$elm$html$Html$button,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Loans')
-				])),
-			A2(
-			$elm$html$Html$button,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Missions')
-				])),
-			A2(
-			$elm$html$Html$button,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('Something else')
-				]))
-		]));
+var $author$project$Main$navigation = function (model) {
+	return (model.accessToken !== '') ? A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('navbar left-section')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Dashboard')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Ships')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Loans')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Missions')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Help')
+					]))
+			])) : A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('navbar left-section')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Help')
+					]))
+			]));
+};
 var $author$project$Main$Login = function (a) {
 	return {$: 'Login', a: a};
 };
@@ -10762,7 +10779,7 @@ var $author$project$Main$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Main$navigation,
+						$author$project$Main$navigation(model),
 						function () {
 						var _v0 = model.currentView;
 						if (_v0 === 'startView') {

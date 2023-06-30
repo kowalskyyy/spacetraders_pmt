@@ -44,7 +44,7 @@ init =
             }
     in
     { username = ""
-    , accessToken = "et"
+    , accessToken = ""
     , gameData = data
     , currentView = "startView"
     }
@@ -94,7 +94,7 @@ view model =
     div []
         [ topBar
         , div [ class "split-view" ]
-            [ navigation
+            [ navigation model
             , case model.currentView of
                 "startView" ->
                     startView model
@@ -110,15 +110,22 @@ topBar =
     div [ class "topbar" ] [ text "this is top shit", button [] [ text "account" ] ]
 
 
-navigation : Html Msg
-navigation =
-    div [ class "navbar left-section" ]
-        [ button [] [ text "Dashboard" ]
-        , button [] [ text "Ships" ]
-        , button [] [ text "Loans" ]
-        , button [] [ text "Missions" ]
-        , button [] [ text "Something else" ]
-        ]
+navigation : Model -> Html Msg
+navigation model =
+    if model.accessToken /= "" then
+        div [ class "navbar left-section" ]
+            [ button [] [ text "Dashboard" ]
+            , button [] [ text "Ships" ]
+            , button [] [ text "Loans" ]
+            , button [] [ text "Missions" ]
+            , button [] [ text "Help" ]
+            ]
+
+    else
+        div
+            [ class "navbar left-section" ]
+            [ button [] [ text "Help" ]
+            ]
 
 
 displayGameData : Model -> Html Msg
