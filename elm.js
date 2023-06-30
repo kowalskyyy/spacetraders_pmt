@@ -10588,50 +10588,74 @@ var $author$project$Main$update = F2(
 					{username: username});
 			case 'Submit':
 				return model;
-			default:
+			case 'ChangeView':
 				var x = msg.a;
 				return _Utils_update(
 					model,
 					{currentView: x});
+			case 'Register':
+				var name = msg.a;
+				return model;
+			default:
+				var toke = msg.a;
+				return model;
 		}
 	});
-var $author$project$Main$SetUsername = function (a) {
-	return {$: 'SetUsername', a: a};
+var $author$project$Main$navigation = A2(
+	$elm$html$Html$div,
+	_List_Nil,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('myButtonClass')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Dashboard')
+				])),
+			A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Ships')
+				])),
+			A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Loans')
+				])),
+			A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Missions')
+				])),
+			A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Something else')
+				]))
+		]));
+var $author$project$Main$Login = function (a) {
+	return {$: 'Login', a: a};
+};
+var $author$project$Main$Register = function (a) {
+	return {$: 'Register', a: a};
 };
 var $author$project$Main$Submit = {$: 'Submit'};
-var $author$project$Main$displayGameData = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Credits: '),
-						$elm$html$Html$text(
-						$elm$core$String$fromInt(model.gameData.credits))
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Loans: '),
-						$elm$html$Html$text(model.gameData.loans.loanName),
-						$elm$html$Html$text('value :'),
-						$elm$html$Html$text(
-						$elm$core$String$fromInt(model.gameData.loans.loanValue))
-					]))
-			]));
-};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
-var $author$project$Main$view = function (model) {
+var $author$project$Main$startView = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -10656,7 +10680,7 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$placeholder('Enter your username'),
-						$elm$html$Html$Events$onInput($author$project$Main$SetUsername)
+						$elm$html$Html$Events$onInput($author$project$Main$Register)
 					]),
 				_List_Nil),
 				A2(
@@ -10670,31 +10694,57 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$text('Register')
 					])),
 				A2(
-				$elm$html$Html$h2,
+				$elm$html$Html$h1,
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Response: ')
+						$elm$html$Html$text('Login')
 					])),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$label,
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text(model.username)
+						$elm$html$Html$text('Access token: ')
 					])),
 				A2(
-				$elm$html$Html$div,
-				_List_Nil,
+				$elm$html$Html$input,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Access token: '),
-						$elm$html$Html$text(model.accessToken)
-					])),
-				(model.accessToken !== '') ? $author$project$Main$displayGameData(model) : $elm$html$Html$text('')
+						$elm$html$Html$Attributes$placeholder('token'),
+						$elm$html$Html$Events$onInput($author$project$Main$Login)
+					]),
+				_List_Nil),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Main$Submit)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Log in')
+					]))
+			]));
+};
+var $author$project$Main$view = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$author$project$Main$navigation,
+				function () {
+				var _v0 = model.currentView;
+				if (_v0 === 'startView') {
+					return $author$project$Main$startView(model);
+				} else {
+					return $elm$html$Html$text('');
+				}
+			}()
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
 	{init: $author$project$Main$init, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"Register":["String.String"],"Login":["String.String"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));

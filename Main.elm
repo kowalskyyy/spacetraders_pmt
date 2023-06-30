@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (Html, button, div, h1, h2, input, label, text)
-import Html.Attributes exposing (placeholder)
+import Html.Attributes exposing (class, placeholder, style)
 import Html.Events exposing (onClick, onInput)
 
 
@@ -92,18 +92,24 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ h1 [] [ text "Register User" ]
-        , label [] [ text "Username: " ]
-        , input [ placeholder "Enter your username", onInput SetUsername ] []
-        , button [ onClick Submit ] [ text "Register" ]
-        , h2 [] [ text "Response: " ]
-        , div [] [ text model.username ]
-        , div [] [ text "Access token: ", text model.accessToken ]
-        , if model.accessToken /= "" then
-            displayGameData model
+        [ navigation
+        , case model.currentView of
+            "startView" ->
+                startView model
 
-          else
-            text ""
+            _ ->
+                text ""
+        ]
+
+
+navigation : Html Msg
+navigation =
+    div []
+        [ div [ class "myButtonClass" ] [ text "Dashboard" ]
+        , div [] [ text "Ships" ]
+        , div [] [ text "Loans" ]
+        , div [] [ text "Missions" ]
+        , div [] [ text "Something else" ]
         ]
 
 
