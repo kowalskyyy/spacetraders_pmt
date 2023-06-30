@@ -1,5 +1,5 @@
 .page {
-	background-color: #1B133F;
+	background-image: url("background.png");
 	height: 100vh;
 	color: white;
 	margin: 0;
@@ -21,6 +21,13 @@
 	width: 30vh;
 }
 
+.logobig {
+	width: 70%;
+	left: 15%;
+	position: absolute;
+	top: 10%;
+}
+
 .navbar button {
 	background: rgb(255, 255, 255);
 	color: black;
@@ -31,6 +38,13 @@
 
 .logo img{
 	width: 35vh;
+}
+
+.description {
+	position: absolute;
+	top: 25%;
+	width: 50%;
+	left: 25%;
 }
 
 .topbar {

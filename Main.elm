@@ -106,8 +106,8 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "page" ]
-        [ topBar
+    div [ class "page", src "background.png" ]
+        [ topBar model
         , div [ class "split-view" ]
             [ navigation model
             , case model.currentView of
@@ -135,9 +135,16 @@ view model =
         ]
 
 
-topBar : Html Msg
-topBar =
-    div [ class "topbar" ] [ div [ class "logo" ] [ img [ src "logo.png" ] [] ], div [] [ text "this is top shit", button [] [ text "account" ] ] ]
+topBar : Model -> Html Msg
+topBar model =
+    if model.currentView == "startView" then
+        text ""
+
+    else
+        div [ class "topbar" ]
+            [ div [ class "logo" ] [ img [ src "logo.png" ] [] ]
+            , div [] [ text "this is top shit", button [] [ text "account" ] ]
+            ]
 
 
 navigation : Model -> Html Msg
@@ -152,10 +159,7 @@ navigation model =
             ]
 
     else
-        div
-            [ class "navbar left-section" ]
-            [ button [] [ text "Help" ]
-            ]
+        text ""
 
 
 displayGameData : Model -> Html Msg
@@ -165,19 +169,23 @@ displayGameData model =
 
 startView : Model -> Html Msg
 startView model =
-    div [ class "right-section" ]
-        [ div [ class "form" ]
-            [ h1 [ class "distance" ] [ text "Register User" ]
-            , label [ class "distance" ] [ text "Username: " ]
-            , input [ placeholder "Enter your username", onInput SetUsername, class "distance" ] []
-            , button [ onClick Submit, class "distance" ] [ text "Register" ]
-            ]
-        , div [ style "padding" "2vh" ] [ text "OR" ]
-        , div [ class "form" ]
-            [ h1 [ class "distance" ] [ text "Login" ]
-            , label [ class "distance" ] [ text "Access token: " ]
-            , input [ placeholder "token", onInput LoginInput, class "distance" ] []
-            , button [ onClick Login, class "distance" ] [ text "Log in" ]
+    div []
+        [ img [ src "logo.png", class "logobig" ] []
+        , div [ class "description" ] [ text "Manage a fleet of ships, automate trade routes, discover hidden secrets in the universe and more. Play/Build now!" ]
+        , div [ class "right-section" ]
+            [ div [ class "form" ]
+                [ h1 [ class "distance" ] [ text "Register User" ]
+                , label [ class "distance" ] [ text "Username: " ]
+                , input [ placeholder "Enter your username", onInput SetUsername, class "distance" ] []
+                , button [ onClick Submit, class "distance" ] [ text "Register" ]
+                ]
+            , div [ style "padding" "2vh" ] [ text "OR" ]
+            , div [ class "form" ]
+                [ h1 [ class "distance" ] [ text "Login" ]
+                , label [ class "distance" ] [ text "Access token: " ]
+                , input [ placeholder "token", onInput LoginInput, class "distance" ] []
+                , button [ onClick Login, class "distance" ] [ text "Log in" ]
+                ]
             ]
         ]
 

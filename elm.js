@@ -11251,22 +11251,13 @@ var $author$project$Main$navigation = function (model) {
 					[
 						$elm$html$Html$text('Help')
 					]))
-			])) : A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('navbar left-section')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$button,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Help')
-					]))
-			]));
+			])) : $elm$html$Html$text('');
+};
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
 var $author$project$Main$Login = {$: 'Login'};
 var $author$project$Main$LoginInput = function (a) {
@@ -11277,14 +11268,158 @@ var $author$project$Main$SetUsername = function (a) {
 };
 var $author$project$Main$Submit = {$: 'Submit'};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $author$project$Main$startView = function (model) {
 	return A2(
 		$elm$html$Html$div,
+		_List_Nil,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('right-section')
+				A2(
+				$elm$html$Html$img,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$src('logo.png'),
+						$elm$html$Html$Attributes$class('logobig')
+					]),
+				_List_Nil),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('description')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Manage a fleet of ships, automate trade routes, discover hidden secrets in the universe and more. Play/Build now!')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('right-section')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('form')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$h1,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Register User')
+									])),
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Username: ')
+									])),
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$placeholder('Enter your username'),
+										$elm$html$Html$Events$onInput($author$project$Main$SetUsername),
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_Nil),
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$Submit),
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Register')
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								A2($elm$html$Html$Attributes$style, 'padding', '2vh')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('OR')
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('form')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$h1,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Login')
+									])),
+								A2(
+								$elm$html$Html$label,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Access token: ')
+									])),
+								A2(
+								$elm$html$Html$input,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$placeholder('token'),
+										$elm$html$Html$Events$onInput($author$project$Main$LoginInput),
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_Nil),
+								A2(
+								$elm$html$Html$button,
+								_List_fromArray(
+									[
+										$elm$html$Html$Events$onClick($author$project$Main$Login),
+										$elm$html$Html$Attributes$class('distance')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Log in')
+									]))
+							]))
+					]))
+			]));
+};
+var $author$project$Main$topBar = function (model) {
+	return (model.currentView === 'startView') ? $elm$html$Html$text('') : A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('topbar')
 			]),
 		_List_fromArray(
 			[
@@ -11292,168 +11427,45 @@ var $author$project$Main$startView = function (model) {
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('form')
+						$elm$html$Html$Attributes$class('logo')
 					]),
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$h1,
+						$elm$html$Html$img,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('distance')
+								$elm$html$Html$Attributes$src('logo.png')
 							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Register User')
-							])),
-						A2(
-						$elm$html$Html$label,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Username: ')
-							])),
-						A2(
-						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$placeholder('Enter your username'),
-								$elm$html$Html$Events$onInput($author$project$Main$SetUsername),
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_Nil),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick($author$project$Main$Submit),
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Register')
-							]))
+						_List_Nil)
 					])),
 				A2(
 				$elm$html$Html$div,
+				_List_Nil,
 				_List_fromArray(
 					[
-						A2($elm$html$Html$Attributes$style, 'padding', '2vh')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('OR')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('form')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$h1,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Login')
-							])),
-						A2(
-						$elm$html$Html$label,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Access token: ')
-							])),
-						A2(
-						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$placeholder('token'),
-								$elm$html$Html$Events$onInput($author$project$Main$LoginInput),
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_Nil),
+						$elm$html$Html$text('this is top shit'),
 						A2(
 						$elm$html$Html$button,
+						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onClick($author$project$Main$Login),
-								$elm$html$Html$Attributes$class('distance')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Log in')
+								$elm$html$Html$text('account')
 							]))
 					]))
 			]));
 };
-var $elm$html$Html$img = _VirtualDom_node('img');
-var $elm$html$Html$Attributes$src = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'src',
-		_VirtualDom_noJavaScriptOrHtmlUri(url));
-};
-var $author$project$Main$topBar = A2(
-	$elm$html$Html$div,
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('topbar')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('logo')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$img,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$src('logo.png')
-						]),
-					_List_Nil)
-				])),
-			A2(
-			$elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text('this is top shit'),
-					A2(
-					$elm$html$Html$button,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text('account')
-						]))
-				]))
-		]));
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('page')
+				$elm$html$Html$Attributes$class('page'),
+				$elm$html$Html$Attributes$src('background.png')
 			]),
 		_List_fromArray(
 			[
-				$author$project$Main$topBar,
+				$author$project$Main$topBar(model),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
