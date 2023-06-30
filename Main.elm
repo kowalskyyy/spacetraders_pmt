@@ -43,7 +43,7 @@ init =
             }
     in
     { username = ""
-    , accessToken = ""
+    , accessToken = "et"
     , gameData = data
     }
 
@@ -95,7 +95,7 @@ view model =
 
 displayGameData : Model -> Html Msg
 displayGameData model =
-    div [] []
+    div [] [ div [] [ text "Credits:", text (String.fromInt model.gameData.credits) ], div [] [ text "Loans: ", text model.gameData.loans.loanName, text "value", text (String.fromInt model.gameData.loans.loanValue) ] ]
 
 
 

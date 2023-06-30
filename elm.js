@@ -4956,7 +4956,7 @@ function _Browser_load(url)
 var $author$project$Main$init = function () {
 	var loanDefault = {loanName: '', loanValue: 100};
 	var data = {credits: 0, loans: loanDefault};
-	return {accessToken: '', gameData: data, username: ''};
+	return {accessToken: 'et', gameData: data, username: ''};
 }();
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
@@ -10594,7 +10594,32 @@ var $author$project$Main$SetUsername = function (a) {
 };
 var $author$project$Main$Submit = {$: 'Submit'};
 var $author$project$Main$displayGameData = function (model) {
-	return A2($elm$html$Html$div, _List_Nil, _List_Nil);
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Credits:'),
+						$elm$html$Html$text(
+						$elm$core$String$fromInt(model.gameData.credits))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Loans: '),
+						$elm$html$Html$text(model.gameData.loans.loanName),
+						$elm$html$Html$text('value'),
+						$elm$html$Html$text(
+						$elm$core$String$fromInt(model.gameData.loans.loanValue))
+					]))
+			]));
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
