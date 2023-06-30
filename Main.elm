@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Commands exposing (..)
+import Data exposing (..)
 import Html exposing (Html, button, div, h1, h2, img, input, label, text)
 import Html.Attributes exposing (class, placeholder, src, style)
 import Html.Events exposing (onClick, onInput)
@@ -10,29 +11,6 @@ import Http
 
 
 -- Model
-
-
-type alias Model =
-    { username : String
-    , accessToken : String
-    , gameData : GameData
-    , currentView : String
-    }
-
-
-type alias GameData =
-    { credits : Int
-    , loans : Loan
-    }
-
-
-type alias Loan =
-    { loanName : String
-    , loanValue : Int
-    }
-
-
-
 -- Main program
 
 
@@ -102,7 +80,7 @@ update msg model =
             ( model, Cmd.none )
 
         RegisterUser (Ok x) ->
-            ( { model | accessToken = x }, Cmd.none )
+            ( { model | accessToken = x, currentView = "dashboard" }, Commands.getFactions GetFactions )
 
         RegisterUser (Err e) ->
             ( model, Cmd.none )

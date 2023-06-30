@@ -1,5 +1,6 @@
 module Commands exposing (..)
 
+import Data exposing (..)
 import Http
 import HttpBuilder exposing (request, withExpect, withHeaders, withJsonBody)
 import Json.Decode exposing (Decoder, at, bool, field, int, list, string, succeed)
@@ -18,12 +19,6 @@ token =
 
 
 --{"data":[{"symbol":"COSMIC","reputation":100}],"meta":{"total":1,"page":1,"limit":10}}
-
-
-type alias Faction =
-    { symbol : String
-    , reputation : Int
-    }
 
 
 factionDecoder : Decoder Faction
@@ -56,7 +51,6 @@ registerUser username msg =
                 ]
     in
     HttpBuilder.post (baseUrl ++ "register")
-        |> withHeaders [ ( "Content-Type", "application/json" ) ]
         |> withExpect (Http.expectJson msg (at [ "data", "token" ] string))
         |> withJsonBody payload
         |> request

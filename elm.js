@@ -11019,32 +11019,9 @@ var $lukewestby$elm_http_builder$HttpBuilder$request = function (builder) {
 	return req(
 		{body: builder.body, expect: builder.expect, headers: builder.headers, method: builder.method, timeout: builder.timeout, tracker: builder.tracker, url: builder.url});
 };
-var $author$project$Commands$token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiVEVBTS1SRUQiLCJ2ZXJzaW9uIjoidjIiLCJyZXNldF9kYXRlIjoiMjAyMy0wNi0yNCIsImlhdCI6MTY4ODExMTU4MCwic3ViIjoiYWdlbnQtdG9rZW4ifQ.bpnSE-hd8jNY9k4pZ0XnmubAOLpYX-y00yjIwoqvKiYA90E2pk-ctBW4BXCyTBko6dB7lpq62N-VacDcIGXEEefy2Uea-yJT6FubOX_SL2DrVDSRu5vZm3GifGrWDoHanuKd-SAQkA5AruaYd0iny5amW4E9RsMlfldB_J2KaO3IQ_cbxxbGUsJeIZr66SaXvds2F68eoUUfk5vJXBcdbXRmzggC0IyjyeZJLwnxvREhO5lnoKKbVr4qswfswkMwMcsYzzl56pf20QdHzxQXtumRj0CUfO6qyrxB3Bz8VJ5Caw6j9wtHJUl0huC1EbwlrpHsv1oUd9QsR9_YyuG5Bg';
 var $lukewestby$elm_http_builder$HttpBuilder$withExpect = F2(
 	function (expect, builder) {
 		return {body: builder.body, expect: expect, headers: builder.headers, method: builder.method, timeout: builder.timeout, tracker: builder.tracker, url: builder.url, withCredentials: builder.withCredentials};
-	});
-var $elm$http$Http$Header = F2(
-	function (a, b) {
-		return {$: 'Header', a: a, b: b};
-	});
-var $elm$http$Http$header = $elm$http$Http$Header;
-var $lukewestby$elm_http_builder$HttpBuilder$withHeaders = F2(
-	function (headerPairs, builder) {
-		return _Utils_update(
-			builder,
-			{
-				headers: _Utils_ap(
-					A2(
-						$elm$core$List$map,
-						function (_v0) {
-							var key = _v0.a;
-							var value = _v0.b;
-							return A2($elm$http$Http$header, key, value);
-						},
-						headerPairs),
-					builder.headers)
-			});
 	});
 var $elm$http$Http$jsonBody = function (value) {
 	return A2(
@@ -11088,14 +11065,7 @@ var $author$project$Commands$registerUser = F2(
 							_List_fromArray(
 								['data', 'token']),
 							$elm$json$Json$Decode$string)),
-					A2(
-						$lukewestby$elm_http_builder$HttpBuilder$withHeaders,
-						_List_fromArray(
-							[
-								_Utils_Tuple2('Content-Type', 'application/json'),
-								_Utils_Tuple2('Authorization', 'Bearer ' + $author$project$Commands$token)
-							]),
-						$lukewestby$elm_http_builder$HttpBuilder$post($author$project$Commands$baseUrl + 'register')))));
+					$lukewestby$elm_http_builder$HttpBuilder$post($author$project$Commands$baseUrl + 'register'))));
 	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
