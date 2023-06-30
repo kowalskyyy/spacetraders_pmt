@@ -84,7 +84,7 @@ view model =
         , button [ onClick Submit ] [ text "Register" ]
         , h2 [] [ text "Response:" ]
         , div [] [ text model.username ]
-        , div [] [ text model.accessToken ]
+        , div [] [ text "Access token:", text model.accessToken ]
         , if model.accessToken /= "" then
             displayGameData model
 
