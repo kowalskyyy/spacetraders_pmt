@@ -56,7 +56,7 @@ registerUser username msg =
                 ]
     in
     HttpBuilder.post (baseUrl ++ "register")
-        |> withHeaders [ ( "Content-Type", "application/json" ), ( "Authorization", "Bearer " ++ token ) ]
+        |> withHeaders [ ( "Content-Type", "application/json" ) ]
         |> withExpect (Http.expectJson msg (at [ "data", "token" ] string))
         |> withJsonBody payload
         |> request
