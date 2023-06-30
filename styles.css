@@ -1,11 +1,17 @@
 .page {
-	display: flex;
+	background-color: #1B133F;
 	height: 100vh;
+	color: white;
+	margin: 0;
+}
+
+.body {
+	margin: 0;
 }
 
 .navbar {
+	padding-top: 2vh;
 	padding-right: 2vh;
-	border-right: 2px solid red;
 }
 
 .navbar button {
@@ -16,9 +22,14 @@
 	width: 20vh;
 }
 
+.logo img{
+	width: 35vh;
+}
+
 .topbar {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
+	height: 6vh;
 }
 
 .navbar div {

@@ -10747,6 +10747,13 @@ var $author$project$Main$startView = function (model) {
 					]))
 			]));
 };
+var $elm$html$Html$img = _VirtualDom_node('img');
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
 var $author$project$Main$topBar = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
@@ -10755,19 +10762,44 @@ var $author$project$Main$topBar = A2(
 		]),
 	_List_fromArray(
 		[
-			$elm$html$Html$text('this is top shit'),
 			A2(
-			$elm$html$Html$button,
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('logo')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$img,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$src('logo.png')
+						]),
+					_List_Nil)
+				])),
+			A2(
+			$elm$html$Html$div,
 			_List_Nil,
 			_List_fromArray(
 				[
-					$elm$html$Html$text('account')
+					$elm$html$Html$text('this is top shit'),
+					A2(
+					$elm$html$Html$button,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$text('account')
+						]))
 				]))
 		]));
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('page')
+			]),
 		_List_fromArray(
 			[
 				$author$project$Main$topBar,

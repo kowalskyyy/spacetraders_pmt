@@ -1,8 +1,8 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, h1, h2, input, label, text)
-import Html.Attributes exposing (class, placeholder, style)
+import Html exposing (Html, button, div, h1, h2, img, input, label, text)
+import Html.Attributes exposing (class, placeholder, src, style)
 import Html.Events exposing (onClick, onInput)
 
 
@@ -91,7 +91,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "page" ]
         [ topBar
         , div [ class "split-view" ]
             [ navigation model
@@ -107,7 +107,7 @@ view model =
 
 topBar : Html Msg
 topBar =
-    div [ class "topbar" ] [ text "this is top shit", button [] [ text "account" ] ]
+    div [ class "topbar" ] [ div [ class "logo" ] [ img [ src "logo.png" ] [] ], div [] [ text "this is top shit", button [] [ text "account" ] ] ]
 
 
 navigation : Model -> Html Msg
