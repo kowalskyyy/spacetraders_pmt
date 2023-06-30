@@ -10735,9 +10735,11 @@ var $author$project$Data$paymentInit = {onAccepted: 0, onFulfilled: 0};
 var $author$project$Data$termsInit = {deadline: '', deliver: _List_Nil, payment: $author$project$Data$paymentInit};
 var $author$project$Data$contractInit = {accepted: false, deadlineToAccept: '', expiration: '', factionSymbol: '', fulfilled: false, id: '', terms: $author$project$Data$termsInit, type_: 'unknown'};
 var $author$project$Data$factionInit = {reputation: 0, symbol: ''};
+var $author$project$Data$initCargo = {capacity: 0, inventory: _List_Nil, units: 0};
+var $author$project$Data$initShip = {cargo: $author$project$Data$initCargo};
 var $author$project$Main$init = function (_v0) {
 	var loanDefault = {loanName: '', loanValue: 100};
-	var data = {agent: $author$project$Data$agentInit, contract: $author$project$Data$contractInit, credits: 0, faction: $author$project$Data$factionInit};
+	var data = {agent: $author$project$Data$agentInit, contract: $author$project$Data$contractInit, credits: 0, faction: $author$project$Data$factionInit, ship: $author$project$Data$initShip};
 	return _Utils_Tuple2(
 		{accessToken: '', currentView: 'startView', gameData: data, inputToken: '', username: ''},
 		$elm$core$Platform$Cmd$none);
@@ -11073,7 +11075,7 @@ var $author$project$Commands$loginUser = F2(
 							_Utils_Tuple2('Content-Type', 'application/json'),
 							_Utils_Tuple2('Authorization', 'Bearer ' + token)
 						]),
-					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my/agent'))));
+					$lukewestby$elm_http_builder$HttpBuilder$get($author$project$Commands$baseUrl + 'my'))));
 	});
 var $lukewestby$elm_http_builder$HttpBuilder$post = $lukewestby$elm_http_builder$HttpBuilder$requestWithMethodAndUrl('POST');
 var $author$project$Data$UserRegistration = F5(
@@ -11398,10 +11400,11 @@ var $author$project$Main$update = F2(
 			case 'RegisterUser':
 				if (_v0.a.$ === 'Ok') {
 					var x = _v0.a.a;
+					var gd = {agent: x.agent, contract: x.contract, credits: x.agent.credits, faction: x.faction, ship: x.ship};
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{accessToken: x.token, currentView: 'dashboard'}),
+							{accessToken: x.token, currentView: 'dashboard', gameData: gd}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var e = _v0.a.a;

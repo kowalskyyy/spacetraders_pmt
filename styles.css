@@ -27,6 +27,10 @@
 
 .rotate {
 	animation: rotation 4s infinite linear;
+	width: 20%;
+    position: absolute;
+    left: 40%;
+    top: -100%;
   }
 
   @keyframes rotation {
