@@ -10683,14 +10683,20 @@ var $author$project$Main$startView = function (model) {
 			[
 				A2(
 				$elm$html$Html$h1,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('distance')
+					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Register User')
 					])),
 				A2(
 				$elm$html$Html$label,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('distance')
+					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Username: ')
@@ -10700,14 +10706,16 @@ var $author$project$Main$startView = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$placeholder('Enter your username'),
-						$elm$html$Html$Events$onInput($author$project$Main$Register)
+						$elm$html$Html$Events$onInput($author$project$Main$Register),
+						$elm$html$Html$Attributes$class('distance')
 					]),
 				_List_Nil),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick($author$project$Main$Submit)
+						$elm$html$Html$Events$onClick($author$project$Main$Submit),
+						$elm$html$Html$Attributes$class('distance')
 					]),
 				_List_fromArray(
 					[
@@ -10715,14 +10723,20 @@ var $author$project$Main$startView = function (model) {
 					])),
 				A2(
 				$elm$html$Html$h1,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('distance')
+					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Login')
 					])),
 				A2(
 				$elm$html$Html$label,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('distance')
+					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Access token: ')
@@ -10732,14 +10746,16 @@ var $author$project$Main$startView = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$placeholder('token'),
-						$elm$html$Html$Events$onInput($author$project$Main$Login)
+						$elm$html$Html$Events$onInput($author$project$Main$Login),
+						$elm$html$Html$Attributes$class('distance')
 					]),
 				_List_Nil),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick($author$project$Main$Submit)
+						$elm$html$Html$Events$onClick($author$project$Main$Submit),
+						$elm$html$Html$Attributes$class('distance')
 					]),
 				_List_fromArray(
 					[

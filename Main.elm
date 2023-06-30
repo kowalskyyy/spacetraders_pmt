@@ -145,14 +145,14 @@ main =
 startView : Model -> Html Msg
 startView model =
     div [ class "right-section" ]
-        [ h1 [] [ text "Register User" ]
-        , label [] [ text "Username: " ]
-        , input [ placeholder "Enter your username", onInput Register ] []
-        , button [ onClick Submit ] [ text "Register" ]
-        , h1 [] [ text "Login" ]
-        , label [] [ text "Access token: " ]
-        , input [ placeholder "token", onInput Login ] []
-        , button [ onClick Submit ] [ text "Log in" ]
+        [ h1 [ class "distance" ] [ text "Register User" ]
+        , label [ class "distance" ] [ text "Username: " ]
+        , input [ placeholder "Enter your username", onInput Register, class "distance" ] []
+        , button [ onClick Submit, class "distance" ] [ text "Register" ]
+        , h1 [ class "distance" ] [ text "Login" ]
+        , label [ class "distance" ] [ text "Access token: " ]
+        , input [ placeholder "token", onInput Login, class "distance" ] []
+        , button [ onClick Submit, class "distance" ] [ text "Log in" ]
         ]
 
 
