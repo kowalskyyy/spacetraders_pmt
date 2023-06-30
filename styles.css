@@ -1,16 +1,18 @@
-.myButtonClass {
-	background: rgb(100, 200, 150);
-	color: red;
-	padding: 10px 20px;
-	font-size: 16px;
-  }
-
 .page {
 	display: flex;
+	height: 100vh;
 }
 
 .navbar {
 	border-right: 2px solid red;
+}
+
+.navbar button {
+	background: rgb(255, 255, 255);
+	color: black;
+	padding: 10px 20px;
+	font-size: 16px;
+	width: 20vh;
 }
 
 .navbar div {
@@ -22,3 +24,21 @@
 	align-items: center;
 }
 
+.split-view {
+	display: flex;
+  }
+
+  .split-view .left-section {
+	flex: 0 0 15%;
+  }
+
+  .split-view .right-section {
+	flex-direction: column;
+	flex: 0 0 85%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+  }

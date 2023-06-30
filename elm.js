@@ -10605,43 +10605,40 @@ var $author$project$Main$navigation = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
 		[
-			$elm$html$Html$Attributes$class('navbar')
+			$elm$html$Html$Attributes$class('navbar left-section')
 		]),
 	_List_fromArray(
 		[
 			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('myButtonClass')
-				]),
+			$elm$html$Html$button,
+			_List_Nil,
 			_List_fromArray(
 				[
 					$elm$html$Html$text('Dashboard')
 				])),
 			A2(
-			$elm$html$Html$div,
+			$elm$html$Html$button,
 			_List_Nil,
 			_List_fromArray(
 				[
 					$elm$html$Html$text('Ships')
 				])),
 			A2(
-			$elm$html$Html$div,
+			$elm$html$Html$button,
 			_List_Nil,
 			_List_fromArray(
 				[
 					$elm$html$Html$text('Loans')
 				])),
 			A2(
-			$elm$html$Html$div,
+			$elm$html$Html$button,
 			_List_Nil,
 			_List_fromArray(
 				[
 					$elm$html$Html$text('Missions')
 				])),
 			A2(
-			$elm$html$Html$div,
+			$elm$html$Html$button,
 			_List_Nil,
 			_List_fromArray(
 				[
@@ -10663,7 +10660,7 @@ var $author$project$Main$startView = function (model) {
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('centerView')
+				$elm$html$Html$Attributes$class('right-section')
 			]),
 		_List_fromArray(
 			[
@@ -10738,7 +10735,7 @@ var $author$project$Main$view = function (model) {
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('page')
+				$elm$html$Html$Attributes$class('split-view')
 			]),
 		_List_fromArray(
 			[
