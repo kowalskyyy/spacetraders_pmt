@@ -1,0 +1,21 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+
+# 2 space indentation
+[{package.json,*.yaml,*.yml,*.sh,*.md}]
+indent_style = space
+indent_size = 2
+
+# 4 space indentation
+[{*.elm,elm.json,*.md}]
+indent_style = space
+indent_size = 4
+
+[elm.json]
+insert_final_newline = false
