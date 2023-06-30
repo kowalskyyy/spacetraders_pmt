@@ -166,14 +166,19 @@ displayGameData model =
 startView : Model -> Html Msg
 startView model =
     div [ class "right-section" ]
-        [ h1 [ class "distance" ] [ text "Register User" ]
-        , label [ class "distance" ] [ text "Username: " ]
-        , input [ placeholder "Enter your username", onInput SetUsername, class "distance" ] []
-        , button [ onClick Submit, class "distance" ] [ text "Register" ]
-        , h1 [ class "distance" ] [ text "Login" ]
-        , label [ class "distance" ] [ text "Access token: " ]
-        , input [ placeholder "token", onInput LoginInput, class "distance" ] []
-        , button [ onClick Login, class "distance" ] [ text "Log in" ]
+        [ div [ class "form" ]
+            [ h1 [ class "distance" ] [ text "Register User" ]
+            , label [ class "distance" ] [ text "Username: " ]
+            , input [ placeholder "Enter your username", onInput SetUsername, class "distance" ] []
+            , button [ onClick Submit, class "distance" ] [ text "Register" ]
+            ]
+        , div [ style "padding" "2vh" ] [ text "OR" ]
+        , div [ class "form" ]
+            [ h1 [ class "distance" ] [ text "Login" ]
+            , label [ class "distance" ] [ text "Access token: " ]
+            , input [ placeholder "token", onInput LoginInput, class "distance" ] []
+            , button [ onClick Login, class "distance" ] [ text "Log in" ]
+            ]
         ]
 
 
