@@ -12,14 +12,44 @@ import Html.Events exposing (onClick, onInput)
 type alias Model =
     { username : String
     , response : String
+    , accessToken : String
+    , gameData : GameData
+    }
+
+type alias GameData =
+    {
+        credits : Int
+        , loans : Loan
+    }
+
+type alias Loan =
+    {
+        loanName : String
+        , loanValue : Int
     }
 
 
 init : Model
 init =
-    { username = ""
-    , response = ""
-    }
+    let
+        data =
+            {
+                credits = 0
+                , loans = loanDefault
+            }
+        loanDefault =
+            {
+                loanName = ""
+                , loanValue = 100
+            }
+
+
+    in
+        { username = ""
+        , response = ""
+        , accessToken = ""
+        , gameData = data
+        }
 
 
 -- Msg
