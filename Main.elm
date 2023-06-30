@@ -79,12 +79,12 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Register User" ]
-        , label [] [ text "Username:" ]
+        , label [] [ text "Username: " ]
         , input [ placeholder "Enter your username", onInput SetUsername ] []
         , button [ onClick Submit ] [ text "Register" ]
-        , h2 [] [ text "Response:" ]
+        , h2 [] [ text "Response: " ]
         , div [] [ text model.username ]
-        , div [] [ text "Access token:", text model.accessToken ]
+        , div [] [ text "Access token: ", text model.accessToken ]
         , if model.accessToken /= "" then
             displayGameData model
 
@@ -95,7 +95,7 @@ view model =
 
 displayGameData : Model -> Html Msg
 displayGameData model =
-    div [] [ div [] [ text "Credits:", text (String.fromInt model.gameData.credits) ], div [] [ text "Loans: ", text model.gameData.loans.loanName, text "value", text (String.fromInt model.gameData.loans.loanValue) ] ]
+    div [] [ div [] [ text "Credits: ", text (String.fromInt model.gameData.credits) ], div [] [ text "Loans: ", text model.gameData.loans.loanName, text "value :", text (String.fromInt model.gameData.loans.loanValue) ] ]
 
 
 

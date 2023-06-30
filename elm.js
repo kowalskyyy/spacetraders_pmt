@@ -10604,7 +10604,7 @@ var $author$project$Main$displayGameData = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Credits:'),
+						$elm$html$Html$text('Credits: '),
 						$elm$html$Html$text(
 						$elm$core$String$fromInt(model.gameData.credits))
 					])),
@@ -10615,7 +10615,7 @@ var $author$project$Main$displayGameData = function (model) {
 					[
 						$elm$html$Html$text('Loans: '),
 						$elm$html$Html$text(model.gameData.loans.loanName),
-						$elm$html$Html$text('value'),
+						$elm$html$Html$text('value :'),
 						$elm$html$Html$text(
 						$elm$core$String$fromInt(model.gameData.loans.loanValue))
 					]))
@@ -10643,7 +10643,7 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Username:')
+						$elm$html$Html$text('Username: ')
 					])),
 				A2(
 				$elm$html$Html$input,
@@ -10668,7 +10668,7 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Response:')
+						$elm$html$Html$text('Response: ')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -10682,6 +10682,7 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
+						$elm$html$Html$text('Access token: '),
 						$elm$html$Html$text(model.accessToken)
 					])),
 				(model.accessToken !== '') ? $author$project$Main$displayGameData(model) : $elm$html$Html$text('')
