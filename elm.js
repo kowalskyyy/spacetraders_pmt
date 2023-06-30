@@ -4956,7 +4956,7 @@ function _Browser_load(url)
 var $author$project$Main$init = function () {
 	var loanDefault = {loanName: '', loanValue: 100};
 	var data = {credits: 0, loans: loanDefault};
-	return {accessToken: 'et', gameData: data, username: ''};
+	return {accessToken: 'et', currentView: 'startView', gameData: data, username: ''};
 }();
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
@@ -10580,13 +10580,19 @@ var $elm$browser$Browser$sandbox = function (impl) {
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'SetUsername') {
-			var username = msg.a;
-			return _Utils_update(
-				model,
-				{username: username});
-		} else {
-			return model;
+		switch (msg.$) {
+			case 'SetUsername':
+				var username = msg.a;
+				return _Utils_update(
+					model,
+					{username: username});
+			case 'Submit':
+				return model;
+			default:
+				var x = msg.a;
+				return _Utils_update(
+					model,
+					{currentView: x});
 		}
 	});
 var $author$project$Main$SetUsername = function (a) {
@@ -10691,4 +10697,4 @@ var $author$project$Main$view = function (model) {
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
 	{init: $author$project$Main$init, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));

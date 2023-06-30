@@ -14,6 +14,7 @@ type alias Model =
     { username : String
     , accessToken : String
     , gameData : GameData
+    , currentView : String
     }
 
 
@@ -45,6 +46,7 @@ init =
     { username = ""
     , accessToken = "et"
     , gameData = data
+    , currentView = "startView"
     }
 
 
@@ -55,6 +57,7 @@ init =
 type Msg
     = SetUsername String
     | Submit
+    | ChangeView String
 
 
 
@@ -69,6 +72,9 @@ update msg model =
 
         Submit ->
             model
+
+        ChangeView x ->
+            { model | currentView = x }
 
 
 
@@ -105,3 +111,28 @@ displayGameData model =
 main : Program () Model Msg
 main =
     Browser.sandbox { init = init, update = update, view = view }
+
+
+startView : Model -> Html Msg
+startView model =
+    div []
+        [ h1 [] [ text "Register User" ]
+        , label [] [ text "Username: " ]
+        , input [ placeholder "Enter your username", onInput SetUsername ] []
+        , button [ onClick Submit ] [ text "Register" ]
+        ]
+
+
+loansView : Model -> Html Msg
+loansView model =
+    div [] []
+
+
+shipsView : Model -> Html Msg
+shipsView model =
+    div [] []
+
+
+accountView : Model -> Html Msg
+accountView model =
+    div [] []
