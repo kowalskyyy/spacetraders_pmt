@@ -99,7 +99,19 @@ view model =
                 "startView" ->
                     startView model
 
-                _ ->
+                "dashboard" ->
+                    dashboardView model
+
+                "ships" ->
+                    text ""
+
+                "loans" ->
+                    text ""
+
+                "missions" ->
+                    text ""
+
+                "help" ->
                     text ""
             ]
         ]
@@ -114,11 +126,11 @@ navigation : Model -> Html Msg
 navigation model =
     if model.accessToken /= "" then
         div [ class "navbar left-section" ]
-            [ button [] [ text "Dashboard" ]
-            , button [] [ text "Ships" ]
-            , button [] [ text "Loans" ]
-            , button [] [ text "Missions" ]
-            , button [] [ text "Help" ]
+            [ button [ onClick (ChangeView "dashboard") ] [ text "Dashboard" ]
+            , button [ onClick (ChangeView "ships") ] [ text "Ships" ]
+            , button [ onClick (ChangeView "loans") ] [ text "Loans" ]
+            , button [ onClick (ChangeView "missions") ] [ text "Missions" ]
+            , button [ onClick (ChangeView "help") ] [ text "Help" ]
             ]
 
     else
@@ -168,4 +180,9 @@ shipsView model =
 
 accountView : Model -> Html Msg
 accountView model =
+    div [] []
+
+
+dashboardView : Model -> Html Msg
+dashboardView model =
     div [] []
