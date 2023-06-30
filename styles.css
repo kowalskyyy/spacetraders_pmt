@@ -17,7 +17,8 @@
 }
 
 .topbar {
-
+	display: flex;
+	justify-content: flex-end;
 }
 
 .navbar div {

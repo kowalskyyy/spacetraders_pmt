@@ -10730,24 +10730,48 @@ var $author$project$Main$startView = function (model) {
 					]))
 			]));
 };
+var $author$project$Main$topBar = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('topbar')
+		]),
+	_List_fromArray(
+		[
+			$elm$html$Html$text('this is top shit'),
+			A2(
+			$elm$html$Html$button,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('account')
+				]))
+		]));
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
+		_List_Nil,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('split-view')
-			]),
-		_List_fromArray(
-			[
-				$author$project$Main$navigation,
-				function () {
-				var _v0 = model.currentView;
-				if (_v0 === 'startView') {
-					return $author$project$Main$startView(model);
-				} else {
-					return $elm$html$Html$text('');
-				}
-			}()
+				$author$project$Main$topBar,
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('split-view')
+					]),
+				_List_fromArray(
+					[
+						$author$project$Main$navigation,
+						function () {
+						var _v0 = model.currentView;
+						if (_v0 === 'startView') {
+							return $author$project$Main$startView(model);
+						} else {
+							return $elm$html$Html$text('');
+						}
+					}()
+					]))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(

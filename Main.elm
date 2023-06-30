@@ -107,7 +107,7 @@ view model =
 
 topBar : Html Msg
 topBar =
-    div [] [ text "this is top shit", button [] [ text "account" ] ]
+    div [ class "topbar" ] [ text "this is top shit", button [] [ text "account" ] ]
 
 
 navigation : Html Msg
