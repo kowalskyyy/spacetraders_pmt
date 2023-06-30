@@ -11579,6 +11579,15 @@ var $author$project$Main$getIndex = F2(
 						}),
 					list))) : $elm$core$Maybe$Nothing;
 	});
+var $author$project$Main$renderAcceptedContract = function (contract) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$text(contract.contract.id)
+			]));
+};
 var $author$project$Main$stringFromBool = function (value) {
 	return value ? 'True' : 'False';
 };
@@ -11625,78 +11634,10 @@ var $author$project$Main$contractsView = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						'Accepted: ' + $author$project$Main$stringFromBool(
-							A2(
-								$elm$core$Maybe$withDefault,
-								{
-									accepted: false,
-									deadlineToAccept: '',
-									expiration: '',
-									factionSymbol: '',
-									fulfilled: false,
-									id: '',
-									terms: {
-										deadline: '',
-										deliver: _List_Nil,
-										payment: {onAccepted: 0, onFulfilled: 0}
-									},
-									type_: ''
-								},
-								A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).accepted)),
-						$elm$html$Html$text(
-						'Faction Symbol: ' + A2(
-							$elm$core$Maybe$withDefault,
-							{
-								accepted: false,
-								deadlineToAccept: '',
-								expiration: '',
-								factionSymbol: '',
-								fulfilled: false,
-								id: '',
-								terms: {
-									deadline: '',
-									deliver: _List_Nil,
-									payment: {onAccepted: 0, onFulfilled: 0}
-								},
-								type_: ''
-							},
-							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).factionSymbol),
-						$elm$html$Html$text(
-						'Contract Id: ' + A2(
-							$elm$core$Maybe$withDefault,
-							{
-								accepted: false,
-								deadlineToAccept: '',
-								expiration: '',
-								factionSymbol: '',
-								fulfilled: false,
-								id: '',
-								terms: {
-									deadline: '',
-									deliver: _List_Nil,
-									payment: {onAccepted: 0, onFulfilled: 0}
-								},
-								type_: ''
-							},
-							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).id),
-						$elm$html$Html$text(
-						'Type: ' + A2(
-							$elm$core$Maybe$withDefault,
-							{
-								accepted: false,
-								deadlineToAccept: '',
-								expiration: '',
-								factionSymbol: '',
-								fulfilled: false,
-								id: '',
-								terms: {
-									deadline: '',
-									deliver: _List_Nil,
-									payment: {onAccepted: 0, onFulfilled: 0}
-								},
-								type_: ''
-							},
-							A2($author$project$Main$getIndex, model.selectedIndex, model.gameData.contracts)).type_)
+						'Accepted: ' + $author$project$Main$stringFromBool(contract.accepted)),
+						$elm$html$Html$text('Faction Symbol: ' + contract.factionSymbol),
+						$elm$html$Html$text('Contract Id: ' + contract.id),
+						$elm$html$Html$text('Type: ' + contract.type_)
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -11734,7 +11675,18 @@ var $author$project$Main$contractsView = function (model) {
 							[
 								$elm$html$Html$text('>')
 							]))
-					]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Accepted contracts : ')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				A2($elm$core$List$map, $author$project$Main$renderAcceptedContract, model.acceptedContracts))
 			]));
 };
 var $elm$html$Html$img = _VirtualDom_node('img');
