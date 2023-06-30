@@ -53,6 +53,7 @@ type Msg
     | Submit
     | ChangeView String
     | LoginInput String
+    | Logout
     | Login
     | GetFactions (Result Http.Error (List Faction))
     | RegisterUser (Result Http.Error String)
@@ -99,6 +100,9 @@ update msg model =
         LoginUser (Err e) ->
             ( model, Cmd.none )
 
+        Logout ->
+            ( { model | accessToken = "", currentView = "startView" }, Cmd.none )
+
 
 
 -- View
@@ -143,7 +147,7 @@ topBar model =
     else
         div [ class "topbar" ]
             [ div [ class "logo" ] [ img [ src "logo.png" ] [] ]
-            , div [] [ text "this is top shit", button [] [ text "account" ] ]
+            , div [] [ button [ onClick Logout ] [ text "Logout" ] ]
             ]
 
 

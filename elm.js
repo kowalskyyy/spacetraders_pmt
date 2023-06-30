@@ -11171,7 +11171,7 @@ var $author$project$Main$update = F2(
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 'LoginUser':
 				if (_v0.a.$ === 'Ok') {
 					var x = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -11179,6 +11179,12 @@ var $author$project$Main$update = F2(
 					var e = _v0.a.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{accessToken: '', currentView: 'startView'}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$dashboardView = function (model) {
@@ -11414,6 +11420,7 @@ var $author$project$Main$startView = function (model) {
 					]))
 			]));
 };
+var $author$project$Main$Logout = {$: 'Logout'};
 var $author$project$Main$topBar = function (model) {
 	return (model.currentView === 'startView') ? $elm$html$Html$text('') : A2(
 		$elm$html$Html$div,
@@ -11444,13 +11451,15 @@ var $author$project$Main$topBar = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('this is top shit'),
 						A2(
 						$elm$html$Html$button,
-						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$text('account')
+								$elm$html$Html$Events$onClick($author$project$Main$Logout)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Logout')
 							]))
 					]))
 			]));
@@ -11507,4 +11516,4 @@ var $author$project$Main$main = $elm$browser$Browser$element(
 		view: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error String.String"],"LoginUser":["Result.Result Http.Error String.String"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Data.Faction":{"args":[],"type":"{ symbol : String.String, reputation : Basics.Int }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SetUsername":["String.String"],"Submit":[],"ChangeView":["String.String"],"LoginInput":["String.String"],"Logout":[],"Login":[],"GetFactions":["Result.Result Http.Error (List.List Data.Faction)"],"RegisterUser":["Result.Result Http.Error String.String"],"LoginUser":["Result.Result Http.Error String.String"]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}}}}})}});}(this));
